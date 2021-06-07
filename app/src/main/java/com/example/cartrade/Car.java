@@ -1,8 +1,10 @@
 package com.example.cartrade;
 
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 
 public class Car {
     private String name;
@@ -13,6 +15,7 @@ public class Car {
     private String description;
     private String location;
     private String telNumber;
+
 
     public Car(String name, int price, String first_registration, int ps, int kilometres, String description, String location, String telNumber) {
         this.name = name;
@@ -103,4 +106,5 @@ public class Car {
         }
         return new Date(first_registration);
     }
+
 }
