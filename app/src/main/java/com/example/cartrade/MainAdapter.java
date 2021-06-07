@@ -19,9 +19,9 @@ public class MainAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater inflater;
 
-    public MainAdapter(Context context, int layout_ID, ArrayList<Car> carList) {
+    public MainAdapter(Context context, int layout_adapter_ID, ArrayList<Car> carList) {
         this.carList = carList;
-        this.layout_ID = layout_ID;
+        this.layout_ID = layout_adapter_ID;
         this.context = context;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -48,7 +48,7 @@ public class MainAdapter extends BaseAdapter {
         View listItem = (convertView == null) ? inflater.inflate(this.layout_ID, null) : convertView;
 
         Car c = carList.get(position);
-        ((TextView) listItem.findViewById(R.id.title)).setText(c.getName());
+        ((TextView) listItem.findViewById(R.id.carName)).setText(c.getName());
         ((TextView) listItem.findViewById(R.id.price)).setText(c.getPrice());
         return listItem;
     }
