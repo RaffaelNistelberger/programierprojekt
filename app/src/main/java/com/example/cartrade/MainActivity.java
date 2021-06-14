@@ -14,6 +14,7 @@ import android.content.ClipData;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,7 +30,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -64,6 +64,17 @@ public class MainActivity extends AppCompatActivity {
         loadData();
         //login();
         //prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+        //login();
+        loadData();
+        //saveData(3,new Car("Test3",1200.10,"1991",110,1000,"Auto3","DE","0650"));
 
     }
 
