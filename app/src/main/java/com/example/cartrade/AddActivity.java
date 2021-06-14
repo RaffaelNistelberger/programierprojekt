@@ -41,6 +41,7 @@ public class AddActivity extends AppCompatActivity {
     private final int PICK_PHOTO_FOR_AVATAR = 888;
     private ImageView carImage;
     private final int ACCESS_FINE_STORAGE = 123;
+    private String carImageString;
 
 
     @Override
@@ -89,7 +90,7 @@ public class AddActivity extends AppCompatActivity {
                 InputStream inputStream = this.getContentResolver().openInputStream(data.getData());
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                 carImage.setImageBitmap(bitmap);
-                System.out.println(bitMapToString(bitmap));
+                carImageString =bitMapToString(bitmap);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -137,6 +138,8 @@ public class AddActivity extends AppCompatActivity {
         returnIntent.putExtra("Description", description.getText().toString());
         returnIntent.putExtra("TelNumber", telNumber.getText().toString());
         returnIntent.putExtra("Location", location.getText().toString());
+        returnIntent.putExtra("CarImageString", carImageString);
+
         setResult(Activity.RESULT_OK, returnIntent);
     }
 

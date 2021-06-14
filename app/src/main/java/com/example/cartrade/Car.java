@@ -19,10 +19,10 @@ public class Car {
     private String description;
     private String location;
     private String telNumber;
-    //private ImageView imageView;
+    private String carImage;
 
 
-    public Car(String name, double price, String first_registration, int ps, int kilometres, String description, String location, String telNumber/*,ImageView imageView*/) {
+    public Car(String name, double price, String first_registration, int ps, int kilometres, String description, String location, String telNumber ,String carImage) {
         this.name = name;
         this.price = price;
         this.first_registration = first_registration;
@@ -31,8 +31,16 @@ public class Car {
         this.description = description;
         this.location = location;
         this.telNumber = telNumber;
-        //this.imageView = imageView;
+        this.carImage = carImage;
 
+    }
+
+    public String getCarImage() {
+        return carImage;
+    }
+
+    public void setCarImage(String carImage) {
+        this.carImage = carImage;
     }
 
     public String getName() {
@@ -109,7 +117,7 @@ public class Car {
 
     @Override
     public String toString() {
-        return name + ";" + price + ";" + first_registration + ";" + ps + ";" + kilometres + ";" + description  + ";" + location + ";" + telNumber;
+        return name + ";" + price + ";" + first_registration + ";" + ps + ";" + kilometres + ";" + description  + ";" + location + ";" + telNumber + ";" + carImage;
     }
     public Date getFirstRegistration() {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");

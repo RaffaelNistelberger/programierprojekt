@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
 
         //returns here when AddActivity upload is finished
         if (resultCode == Activity.RESULT_OK) {
-            Car tmp = new Car(data.getStringExtra("Name"), Integer.parseInt(data.getStringExtra("Price")), data.getStringExtra("First_Registration"), Integer.parseInt(data.getStringExtra("Ps")), Integer.parseInt(data.getStringExtra("Kilometres")), data.getStringExtra("Description"), data.getStringExtra("Location"), data.getStringExtra("TelNumber"));
+            Car tmp = new Car(data.getStringExtra("Name"), Integer.parseInt(data.getStringExtra("Price")), data.getStringExtra("First_Registration"), Integer.parseInt(data.getStringExtra("Ps")), Integer.parseInt(data.getStringExtra("Kilometres")), data.getStringExtra("Description"), data.getStringExtra("Location"), data.getStringExtra("TelNumber"), data.getStringExtra("CarImageString"));
             saveData(nextIndex, tmp);
         }
         if (resultCode == Activity.RESULT_CANCELED) {
