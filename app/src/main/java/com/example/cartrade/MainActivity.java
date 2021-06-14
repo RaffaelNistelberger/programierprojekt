@@ -1,18 +1,48 @@
 package com.example.cartrade;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.RequiresApi;
 
-import android.app.Activity;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.content.ClipData;
 import android.os.Build;
 import android.os.Bundle;
+
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import android.os.Message;
+
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +50,12 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Car> carList;
     private ListView listView;
     private LinearLayout linearLayout;
+    private final static int RQ_PREFERENCES = 1;
+    private SharedPreferences prefs;
+    private int nextIndex;
+
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference("cars");
     private final int ADD_ACTIVITY_REQUEST_CODE = 187;
 
     @Override
@@ -27,13 +63,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         login();
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -43,7 +76,9 @@ public class MainActivity extends AppCompatActivity {
                 add();
                 return true;
             case R.id.settings:
-                //Methode hinzufügen
+                Intent intent = new Intent(this,
+                        MySettingsActivity.class);
+                startActivityForResult(intent, RQ_PREFERENCES);
                 return true;
             case R.id.search_bar:
                 //Methode hinzufügen
@@ -52,6 +87,29 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.search_bar);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setQueryHint("Search here!");
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                //adapter.getFilter().filter(s);
+                return true;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
 
     public void login(){
         carList = new ArrayList<>();
@@ -68,6 +126,19 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
     }
 
+    public void showPrefs(View view) {
+        String backgroundColor = prefs.getString(getString(R.string.Darkmode_pref), "#FFFFFF");
+        view.setBackgroundColor(Color.parseColor(backgroundColor));
+    }
+
+    private void preferenceChanged(SharedPreferences sharedPrefs, String key) {
+        if (key.equals("Darkmode_pref")) {
+            String sValue = sharedPrefs.getString(key, "");
+            Toast.makeText(this, key + " new Background: " + sValue, Toast.LENGTH_LONG).show();
+            recreate();
+        }
+    }
+
     public void sortListbyPriceDesc(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             carList.sort((o1, o2) -> o2.getPrice() -o1.getPrice());
@@ -80,6 +151,33 @@ public class MainActivity extends AppCompatActivity {
             carList.sort((o1, o2) -> o1.getPrice() -o2.getPrice());
             bindAdapterToListView(listView);
         }
+    }
+    private void saveData(int index,Car carToAdd){
+        myRef.child(index+"").setValue(carToAdd.toMap());
+        System.out.println("Saved to Database!");
+    }
+
+    private void loadData(){
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Iterable<DataSnapshot> dataSnapshot1 = dataSnapshot.getChildren();
+                Iterator it = dataSnapshot1.iterator();
+                while (it.hasNext()){
+                    System.out.println((DataSnapshot)it.next());
+                    System.out.println(dataSnapshot.getChildrenCount());
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                System.out.println("ERROR");
+            }
+        });
     }
 
     public void add(){
