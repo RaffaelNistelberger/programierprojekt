@@ -4,6 +4,8 @@ package com.example.cartrade;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Car {
@@ -105,6 +107,19 @@ public class Car {
 
         }
         return new Date(first_registration);
+    }
+
+    public Map<String,Object> toMap(){
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("name", this.name);
+        result.put("price", this.price);
+        result.put("first_registration", this.first_registration);
+        result.put("ps", this.ps);
+        result.put("kilometres", this.kilometres);
+        result.put("description", this.description);
+        result.put("location", this.location);
+        result.put("telNumber", this.telNumber);
+        return result;
     }
 
 }
