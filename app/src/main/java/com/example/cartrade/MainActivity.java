@@ -54,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences prefs;
     private int nextIndex;
 
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("cars");
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference myRef = database.getReference("cars");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, RQ_PREFERENCES);
                 return true;
             case R.id.search_bar:
-                //Methode hinzufügen
+                searchTerm(item);
                 return true;
             case R.id.priceInc:
                 sortListbyPriceAsc();
@@ -91,15 +91,17 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
-        MenuItem menuItem = menu.findItem(R.id.search_bar);
+    public void searchTerm(MenuItem menuItem) {
         SearchView searchView = (SearchView) menuItem.getActionView();
         searchView.setQueryHint("Search here!");
-
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -112,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        return super.onCreateOptionsMenu(menu);
     }
 
     public void login() {
@@ -143,25 +144,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void sortListbyPriceDesc(){
+    public void sortListbyPriceDesc() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             //carList.sort((o1, o2) -> o2.getPrice() -o1.getPrice());
             bindAdapterToListView(listView);
         }
     }
 
-    public void sortListbyPriceAsc(){
+    public void sortListbyPriceAsc() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             //carList.sort((o1, o2) -> o1.getPrice() -o2.getPrice());
             bindAdapterToListView(listView);
         }
     }
-    private void saveData(int index,Car carToAdd){
-        myRef.child(index+"").setValue(carToAdd.toMap());
+
+    private void saveData(int index, Car carToAdd) {
+        myRef.child(index + "").setValue(carToAdd.toMap());
         System.out.println("Saved to Database!");
     }
 
-    private void loadData(){
+    private void loadData() {
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -169,8 +171,8 @@ public class MainActivity extends AppCompatActivity {
 
                 Iterable<DataSnapshot> dataSnapshot1 = dataSnapshot.getChildren();
                 Iterator it = dataSnapshot1.iterator();
-                while (it.hasNext()){
-                    System.out.println((DataSnapshot)it.next());
+                while (it.hasNext()) {
+                    System.out.println((DataSnapshot) it.next());
                     System.out.println(dataSnapshot.getChildrenCount());
                 }
 
@@ -184,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void add(){
+    public void add() {
 
     }
 
