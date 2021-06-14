@@ -3,6 +3,6 @@
     <SwitchPreference
         android:defaultValue="false"
         android:title="Darkmode"
-        android:key="Darkmode_pref"
+        android:key="@string/Darkmode_pref"
         android:summary="Turn Darkmode on"/>
 </PreferenceScreen>
