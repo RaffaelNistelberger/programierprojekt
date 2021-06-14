@@ -10,64 +10,64 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name" />
+        android:hint="Name"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/editText_Price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Price" />
+        android:hint="Price"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/editText_first_registration"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="First Registration" />
+        android:hint="First Registration"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/editText_ps"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Ps" />
+        android:hint="Ps"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/editText_Kilometres"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Kilometres" />
+        android:hint="Kilometres"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/editText_Description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Description" />
+        android:hint="Description"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/editText_Location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Location" />
+        android:hint="Location"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/editText_TelNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="TelNumber" />
+        android:hint="TelNumber"
+        android:inputType="textPersonName" />
 
     <Button
         android:id="@+id/button_Upload"
