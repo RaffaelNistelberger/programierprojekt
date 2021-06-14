@@ -65,4 +65,18 @@ public class MainActivity extends AppCompatActivity {
 
         listView.setAdapter(adapter);
     }
+
+    public void sortListbyPriceDesc(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            carList.sort((o1, o2) -> o2.getPrice() -o1.getPrice());
+            bindAdapterToListView(listView);
+        }
+    }
+
+    public void sortListbyPriceAsc(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            carList.sort((o1, o2) -> o1.getPrice() -o2.getPrice());
+            bindAdapterToListView(listView);
+        }
+    }
 }
