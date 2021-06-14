@@ -10,12 +10,15 @@ import androidx.appcompat.widget.SearchView;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.content.ClipData;
 import android.os.Build;
 import android.os.Bundle;
 
 import android.preference.PreferenceManager;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -65,8 +68,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         loadData();
         login();
-        //prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //saveData(nextIndex, new Car("Test",12000,"1991",200,120000,"Auto"+nextIndex,"AUT", "0650"));
+        //prefs = PreferenceManager.getDefaultSharedPreferences(this)
     }
 
 
@@ -145,16 +147,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void sortListbyPriceAsc() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            carList.sort((o1, o2) -> (int) (o1.getPrice() -o2.getPrice()));
+            carList.sort((o1, o2) -> (int) (o1.getPrice() - o2.getPrice()));
             bindAdapterToListView(listView);
         }
     }
-    private void saveData(long index,Car carToAdd){
-        myRef.child(index+"").setValue(carToAdd.toMap());
+
+    private void saveData(long index, Car carToAdd) {
+        myRef.child(index + "").setValue(carToAdd.toMap());
         System.out.println("Saved to Database!");
     }
 
-    private void loadData(){
+    private void loadData() {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -163,21 +166,21 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println(nextIndex);
                 Iterable<DataSnapshot> dataSnapshot1 = dataSnapshot.getChildren();
                 Iterator it = dataSnapshot1.iterator();
-                while (it.hasNext()){
+                while (it.hasNext()) {
                     DataSnapshot ds = ((DataSnapshot) it.next());
                     System.out.println(ds);
 
                     String name = ds.child("name").getValue().toString();
                     double price = Double.parseDouble(ds.child("price").getValue().toString());
-                    String first_registration= ds.child("first_registration").getValue().toString();
+                    String first_registration = ds.child("first_registration").getValue().toString();
                     int ps = Integer.parseInt(ds.child("ps").getValue().toString());
                     int kilometres = Integer.parseInt(ds.child("kilometres").getValue().toString());
-                    String description= ds.child("description").getValue().toString();
+                    String description = ds.child("description").getValue().toString();
                     String location = ds.child("location").getValue().toString();
                     String telNumber = ds.child("telNumber").getValue().toString();
 
 
-                    carList.add(new Car(name,price,first_registration,ps,kilometres,description,location,telNumber));
+                    carList.add(new Car(name, price, first_registration, ps, kilometres, description, location, telNumber));
                     bindAdapterToListView(listView);
                 }
             }
@@ -190,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void add(){
+    public void add() {
         Intent intent = new Intent(MainActivity.this, AddActivity.class);
         startActivityForResult(intent, ADD_ACTIVITY_REQUEST_CODE);
     }
@@ -200,14 +203,25 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         //returns here when AddActivity upload is finished
-            if (resultCode == Activity.RESULT_OK) {
-                Car tmp = new Car(data.getStringExtra("Name"), Integer.parseInt(data.getStringExtra("Price")), data.getStringExtra("First_Registration"), Integer.parseInt(data.getStringExtra("Ps")), Integer.parseInt(data.getStringExtra("Kilometres")), data.getStringExtra("Description"), data.getStringExtra("Location"), data.getStringExtra("TelNumber"));
-                saveData(nextIndex, tmp);
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
+        if (resultCode == Activity.RESULT_OK) {
+            Car tmp = new Car(data.getStringExtra("Name"), Integer.parseInt(data.getStringExtra("Price")), data.getStringExtra("First_Registration"), Integer.parseInt(data.getStringExtra("Ps")), Integer.parseInt(data.getStringExtra("Kilometres")), data.getStringExtra("Description"), data.getStringExtra("Location"), data.getStringExtra("TelNumber"));
+            saveData(nextIndex, tmp);
+        }
+        if (resultCode == Activity.RESULT_CANCELED) {
 
-            }
+        }
+    }
+
+    public Bitmap StringToBitMap(String encodedString) {
+        try {
+            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch (Exception e) {
+            e.getMessage();
+            return null;
         }
 
 
+    }
 }

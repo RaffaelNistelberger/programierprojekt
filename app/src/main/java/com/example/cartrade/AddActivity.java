@@ -105,6 +105,8 @@ public class AddActivity extends AppCompatActivity {
         return temp;
     }
 
+
+
     private void checkPermissionExternalStorage() {
         String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
         String permission2 = Manifest.permission.WRITE_EXTERNAL_STORAGE;
