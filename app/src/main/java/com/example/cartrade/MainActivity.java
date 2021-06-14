@@ -31,6 +31,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         loadData();
         //login();
         //prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
+        //saveData(nextIndex, new Car("Test",12000,"1991",200,120000,"Auto"+nextIndex,"AUT", "0650"));
     }
 
 
@@ -180,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println((DataSnapshot)it.next());
 
                 }
-                //saveData(nextIndex, new Car("Test",12000,"1991",200,120000,"Auto"+nextIndex,"AUT", "0650"));
+
 
             }
 
