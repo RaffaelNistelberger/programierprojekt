@@ -5,7 +5,11 @@ import androidx.annotation.RequiresApi;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -19,9 +23,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Car> carList;
     private ListView listView;
     private LinearLayout linearLayout;
+    private final static int RQ_PREFERENCES = 1;
+    private SharedPreferences prefs;
     private int nextIndex;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -49,6 +57,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        login();
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
         //login();
         loadData();
         //saveData(3,new Car("Test3",1200.10,"1991",110,1000,"Auto3","DE","0650"));
@@ -60,13 +78,21 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.add:
-                //Methode hinzufügen
+                add();
                 return true;
             case R.id.settings:
-                //Methode hinzufügen
+                Intent intent = new Intent(this,
+                        MySettingsActivity.class);
+                startActivityForResult(intent, RQ_PREFERENCES);
                 return true;
             case R.id.search_bar:
                 //Methode hinzufügen
+                return true;
+            case R.id.priceInc:
+                sortListbyPriceAsc();
+                return true;
+            case R.id.priceDesc:
+                sortListbyPriceDesc();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -78,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    public void login(){
+    public void login() {
         carList = new ArrayList<>();
         linearLayout = findViewById(R.id.linearLayout);
         listView = findViewById(R.id.listView);
@@ -91,6 +117,36 @@ public class MainActivity extends AppCompatActivity {
         adapter = new MainAdapter(this, R.layout.activity_adapter, carList);
 
         listView.setAdapter(adapter);
+    }
+
+    public void showPrefs(View view) {
+        String backgroundColor = prefs.getString(getString(R.string.Darkmode_pref), "#FFFFFF");
+        view.setBackgroundColor(Color.parseColor(backgroundColor));
+    }
+
+    private void preferenceChanged(SharedPreferences sharedPrefs, String key) {
+        if (key.equals("Darkmode_pref")) {
+            String sValue = sharedPrefs.getString(key, "");
+            Toast.makeText(this, key + " new Background: " + sValue, Toast.LENGTH_LONG).show();
+            recreate();
+        }
+    }
+
+    private void loadData(){
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot ds : snapshot.getChildren()){
+                    System.out.println(ds.getValue().toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void sortListbyPriceDesc(){
@@ -132,6 +188,10 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("ERROR");
             }
         });
+    }
+
+    public void add(){
+
     }
 
 }
