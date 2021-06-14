@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private final static int RQ_PREFERENCES = 1;
     private SharedPreferences prefs;
     private int nextIndex;
+    private final int ADD_ACTIVITY_REQUEST_CODE = 187;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("cars");
