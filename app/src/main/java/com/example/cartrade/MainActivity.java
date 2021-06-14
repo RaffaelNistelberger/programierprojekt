@@ -138,14 +138,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void sortListbyPriceDesc() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            //carList.sort((o1, o2) -> o2.getPrice() -o1.getPrice());
+            carList.sort((o1, o2) -> (int) (o2.getPrice() - o1.getPrice()));
             bindAdapterToListView(listView);
         }
     }
 
     public void sortListbyPriceAsc() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            //carList.sort((o1, o2) -> o1.getPrice() -o2.getPrice());
+            carList.sort((o1, o2) -> (int) (o1.getPrice() -o2.getPrice()));
             bindAdapterToListView(listView);
         }
     }
