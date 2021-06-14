@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout linearLayout;
     private final static int RQ_PREFERENCES = 1;
     private SharedPreferences prefs;
-    private long nextIndex;
+    public long nextIndex;
     private final int ADD_ACTIVITY_REQUEST_CODE = 187;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loadData();
-        //login();
+        login();
         //prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //saveData(nextIndex, new Car("Test",12000,"1991",200,120000,"Auto"+nextIndex,"AUT", "0650"));
     }
@@ -126,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
         carList = new ArrayList<>();
         linearLayout = findViewById(R.id.linearLayout);
         listView = findViewById(R.id.listView);
-        //loadCarsIntoList
         bindAdapterToListView(listView);
     }
 
@@ -172,16 +171,28 @@ public class MainActivity extends AppCompatActivity {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                carList.clear();
                 nextIndex = dataSnapshot.getChildrenCount();
                 System.out.println(nextIndex);
                 Iterable<DataSnapshot> dataSnapshot1 = dataSnapshot.getChildren();
                 Iterator it = dataSnapshot1.iterator();
                 while (it.hasNext()){
-                    System.out.println((DataSnapshot)it.next());
+                    DataSnapshot ds = ((DataSnapshot) it.next());
+                    System.out.println(ds);
 
+                    String name = ds.child("name").getValue().toString();
+                    double price = Double.parseDouble(ds.child("price").getValue().toString());
+                    String first_registration= ds.child("first_registration").getValue().toString();
+                    int ps = Integer.parseInt(ds.child("ps").getValue().toString());
+                    int kilometres = Integer.parseInt(ds.child("kilometres").getValue().toString());
+                    String description= ds.child("description").getValue().toString();
+                    String location = ds.child("location").getValue().toString();
+                    String telNumber = ds.child("telNumber").getValue().toString();
+
+
+                    carList.add(new Car(name,price,first_registration,ps,kilometres,description,location,telNumber));
+                    bindAdapterToListView(listView);
                 }
-
-
             }
 
             @Override
@@ -204,9 +215,8 @@ public class MainActivity extends AppCompatActivity {
         //returns here when AddActivity upload is finished
         if(requestCode == ADD_ACTIVITY_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                Car tmp = new Car(data.getStringExtra("Name"), Integer.parseInt(data.getStringExtra("Price")), data.getStringExtra("First_registration"), Integer.parseInt(data.getStringExtra("Ps")), Integer.parseInt(data.getStringExtra("Kilometres")), data.getStringExtra("Description"), data.getStringExtra("Location"), data.getStringExtra("TelNumber"));
-                carList.add(tmp);
-                bindAdapterToListView(listView);
+                Car tmp = new Car(data.getStringExtra("Name"), Integer.parseInt(data.getStringExtra("Price")), data.getStringExtra("First_Registration"), Integer.parseInt(data.getStringExtra("Ps")), Integer.parseInt(data.getStringExtra("Kilometres")), data.getStringExtra("Description"), data.getStringExtra("Location"), data.getStringExtra("TelNumber"));
+                saveData(nextIndex, tmp);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
 
