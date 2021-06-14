@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -29,6 +30,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,14 +40,18 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Car> carList;
     private ListView listView;
     private LinearLayout linearLayout;
+    private int nextIndex;
+
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference("cars");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //login();
-        //loadData();
-        saveData();
+        loadData();
+        //saveData(3,new Car("Test3",1200.10,"1991",110,1000,"Auto3","DE","0650"));
 
     }
 
@@ -85,41 +93,45 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
     }
 
-    private void loadData(){
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot ds : snapshot.getChildren()){
-                    System.out.println(ds.getValue().toString());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
     public void sortListbyPriceDesc(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            carList.sort((o1, o2) -> o2.getPrice() -o1.getPrice());
+            //carList.sort((o1, o2) -> o2.getPrice() -o1.getPrice());
             bindAdapterToListView(listView);
         }
     }
 
     public void sortListbyPriceAsc(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            carList.sort((o1, o2) -> o1.getPrice() -o2.getPrice());
+            //carList.sort((o1, o2) -> o1.getPrice() -o2.getPrice());
             bindAdapterToListView(listView);
         }
     }
-    private void saveData(){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("cars");
+    private void saveData(int index,Car carToAdd){
+        myRef.child(index+"").setValue(carToAdd.toMap());
+        System.out.println("Saved to Database!");
+    }
 
-        myRef.setValue(new CarEntity(1,"Test3"));
+    private void loadData(){
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Iterable<DataSnapshot> dataSnapshot1 = dataSnapshot.getChildren();
+                Iterator it = dataSnapshot1.iterator();
+                while (it.hasNext()){
+                    System.out.println((DataSnapshot)it.next());
+                    System.out.println(dataSnapshot.getChildrenCount());
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                System.out.println("ERROR");
+            }
+        });
     }
 
 }

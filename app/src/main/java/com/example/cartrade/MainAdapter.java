@@ -49,7 +49,7 @@ public class MainAdapter extends BaseAdapter {
 
         Car c = carList.get(position);
         ((TextView) listItem.findViewById(R.id.carName)).setText(c.getName());
-        ((TextView) listItem.findViewById(R.id.price)).setText(c.getPrice());
+        ((TextView) listItem.findViewById(R.id.price)).setText(c.getPrice()+"");
         return listItem;
     }
 }
