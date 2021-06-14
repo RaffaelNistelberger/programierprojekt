@@ -17,4 +17,10 @@
         android:title="Search"
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="always"></item>
+    <item
+        android:id="@+id/priceInc"
+        android:title="Preis Aufsteigend" />
+    <item
+        android:id="@+id/priceDesc"
+        android:title="Preis Absteigend" />
 </menu>

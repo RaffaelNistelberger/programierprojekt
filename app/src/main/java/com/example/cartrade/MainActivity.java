@@ -46,6 +46,12 @@ public class MainActivity extends AppCompatActivity {
             case R.id.search_bar:
                 //Methode hinzufügen
                 return true;
+            case R.id.priceInc:
+                //Methode hinzufügen
+                return true;
+            case R.id.priceDesc:
+                //Methode hinzufügen
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
