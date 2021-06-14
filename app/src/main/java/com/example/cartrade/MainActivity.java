@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("cars");
-    private final int ADD_ACTIVITY_REQUEST_CODE = 187;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,10 +82,15 @@ public class MainActivity extends AppCompatActivity {
             case R.id.search_bar:
                 //Methode hinzufügen
                 return true;
+            case R.id.priceInc:
+                sortListbyPriceAsc();
+                return true;
+            case R.id.priceDesc:
+                sortListbyPriceDesc();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -111,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    public void login(){
+    public void login() {
         carList = new ArrayList<>();
         linearLayout = findViewById(R.id.linearLayout);
         listView = findViewById(R.id.listView);
@@ -141,14 +145,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void sortListbyPriceDesc(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            carList.sort((o1, o2) -> o2.getPrice() -o1.getPrice());
+            //carList.sort((o1, o2) -> o2.getPrice() -o1.getPrice());
             bindAdapterToListView(listView);
         }
     }
 
     public void sortListbyPriceAsc(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            carList.sort((o1, o2) -> o1.getPrice() -o2.getPrice());
+            //carList.sort((o1, o2) -> o1.getPrice() -o2.getPrice());
             bindAdapterToListView(listView);
         }
     }
