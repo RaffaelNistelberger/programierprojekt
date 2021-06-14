@@ -1,6 +1,8 @@
 package com.example.cartrade;
 
 
+import android.widget.ImageView;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,16 +12,17 @@ import java.util.Map;
 
 public class Car {
     private String name;
-    private int price;
+    private double price;
     private String first_registration;
     private int ps;
     private int kilometres;
     private String description;
     private String location;
     private String telNumber;
+    //private ImageView imageView;
 
 
-    public Car(String name, int price, String first_registration, int ps, int kilometres, String description, String location, String telNumber) {
+    public Car(String name, double price, String first_registration, int ps, int kilometres, String description, String location, String telNumber/*,ImageView imageView*/) {
         this.name = name;
         this.price = price;
         this.first_registration = first_registration;
@@ -28,6 +31,8 @@ public class Car {
         this.description = description;
         this.location = location;
         this.telNumber = telNumber;
+        //this.imageView = imageView;
+
     }
 
     public String getName() {
@@ -38,11 +43,11 @@ public class Car {
         this.name = name;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -53,6 +58,14 @@ public class Car {
     public void setFirst_registration(String first_registration) {
         this.first_registration = first_registration;
     }
+
+    /*public ImageView getImageView() {
+        return imageView;
+    }
+
+    public void setImageView(ImageView imageView) {
+        this.imageView = imageView;
+    }*/
 
     public int getPs() {
         return ps;
@@ -119,6 +132,7 @@ public class Car {
         result.put("description", this.description);
         result.put("location", this.location);
         result.put("telNumber", this.telNumber);
+        //result.put("imageView", this.imageView);
         return result;
     }
 
