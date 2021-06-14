@@ -105,27 +105,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void searchTerm(MenuItem menuItem) {
-        SearchView searchView = (SearchView) menuItem.getActionView();
-        searchView.setQueryHint("Search here!");
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                //adapter.getFilter().filter(s);
-                return true;
-            }
-        });
     }
 
     public void login() {
         carList = new ArrayList<>();
         linearLayout = findViewById(R.id.linearLayout);
         listView = findViewById(R.id.listView);
+        //loadCarsIntoList
         bindAdapterToListView(listView);
     }
 
@@ -151,14 +138,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void sortListbyPriceDesc() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            //carList.sort((o1, o2) -> o2.getPrice() -o1.getPrice());
+            carList.sort((o1, o2) -> (int) (o2.getPrice() - o1.getPrice()));
             bindAdapterToListView(listView);
         }
     }
 
     public void sortListbyPriceAsc() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            //carList.sort((o1, o2) -> o1.getPrice() -o2.getPrice());
+            carList.sort((o1, o2) -> (int) (o1.getPrice() -o2.getPrice()));
             bindAdapterToListView(listView);
         }
     }
@@ -213,7 +200,6 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         //returns here when AddActivity upload is finished
-        if(requestCode == ADD_ACTIVITY_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 Car tmp = new Car(data.getStringExtra("Name"), Integer.parseInt(data.getStringExtra("Price")), data.getStringExtra("First_Registration"), Integer.parseInt(data.getStringExtra("Ps")), Integer.parseInt(data.getStringExtra("Kilometres")), data.getStringExtra("Description"), data.getStringExtra("Location"), data.getStringExtra("TelNumber"));
                 saveData(nextIndex, tmp);
@@ -222,6 +208,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
-    }
+
 
 }

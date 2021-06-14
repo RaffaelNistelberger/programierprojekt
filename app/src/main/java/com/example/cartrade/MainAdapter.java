@@ -19,7 +19,7 @@ public class MainAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater inflater;
 
-    public MainAdapter(Context context, int layout_adapter_ID, ArrayList<Car> carList) {
+    public MainAdapter(Context context, int layout_adapter_ID, List<Car> carList) {
         this.carList = carList;
         this.layout_ID = layout_adapter_ID;
         this.context = context;
