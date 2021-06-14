@@ -19,10 +19,10 @@ public class Car {
     private String description;
     private String location;
     private String telNumber;
-    private String carImage;
+    private String bitMapString;
 
 
-    public Car(String name, double price, String first_registration, int ps, int kilometres, String description, String location, String telNumber ,String carImage) {
+    public Car(String name, double price, String first_registration, int ps, int kilometres, String description, String location, String telNumber, String bitMapString) {
         this.name = name;
         this.price = price;
         this.first_registration = first_registration;
@@ -31,16 +31,8 @@ public class Car {
         this.description = description;
         this.location = location;
         this.telNumber = telNumber;
-        this.carImage = carImage;
+        this.bitMapString = bitMapString;
 
-    }
-
-    public String getCarImage() {
-        return carImage;
-    }
-
-    public void setCarImage(String carImage) {
-        this.carImage = carImage;
     }
 
     public String getName() {
@@ -67,13 +59,13 @@ public class Car {
         this.first_registration = first_registration;
     }
 
-    /*public ImageView getImageView() {
-        return imageView;
+    public String getBitMapString() {
+        return bitMapString;
     }
 
-    public void setImageView(ImageView imageView) {
-        this.imageView = imageView;
-    }*/
+    public void setBitMapString(String bitMapString) {
+        this.bitMapString = bitMapString;
+    }
 
     public int getPs() {
         return ps;
@@ -117,7 +109,7 @@ public class Car {
 
     @Override
     public String toString() {
-        return name + ";" + price + ";" + first_registration + ";" + ps + ";" + kilometres + ";" + description  + ";" + location + ";" + telNumber + ";" + carImage;
+        return name + ";" + price + ";" + first_registration + ";" + ps + ";" + kilometres + ";" + description  + ";" + location + ";" + telNumber+";"+bitMapString;
     }
     public Date getFirstRegistration() {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
@@ -140,7 +132,7 @@ public class Car {
         result.put("description", this.description);
         result.put("location", this.location);
         result.put("telNumber", this.telNumber);
-        //result.put("imageView", this.imageView);
+        result.put("bitMapString", this.bitMapString);
         return result;
     }
 

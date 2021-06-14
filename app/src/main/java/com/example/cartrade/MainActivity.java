@@ -178,9 +178,10 @@ public class MainActivity extends AppCompatActivity {
                     String description = ds.child("description").getValue().toString();
                     String location = ds.child("location").getValue().toString();
                     String telNumber = ds.child("telNumber").getValue().toString();
+                    String bitMapString = ds.child("bitMapString").getValue().toString();
 
 
-                    carList.add(new Car(name, price, first_registration, ps, kilometres, description, location, telNumber));
+                    carList.add(new Car(name, price, first_registration, ps, kilometres, description, location, telNumber, bitMapString));
                     bindAdapterToListView(listView);
                 }
             }
