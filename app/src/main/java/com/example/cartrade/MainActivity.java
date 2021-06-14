@@ -5,8 +5,9 @@ import androidx.annotation.RequiresApi;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.PreferenceManager;
+import androidx.appcompat.widget.SearchView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private final static int RQ_PREFERENCES = 1;
     private SharedPreferences prefs;
     private long nextIndex;
+    private final int ADD_ACTIVITY_REQUEST_CODE = 187;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("cars");
@@ -67,16 +69,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return super.onCreateOptionsMenu(menu);
-        //login();
-        loadData();
-        //saveData(3,new Car("Test3",1200.10,"1991",110,1000,"Auto3","DE","0650"));
-
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -91,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, RQ_PREFERENCES);
                 return true;
             case R.id.search_bar:
-                //Methode hinzufügen
+                searchTerm(item);
                 return true;
             case R.id.priceInc:
                 sortListbyPriceAsc();
@@ -102,12 +94,17 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
 
-        MenuItem menuItem = menu.findItem(R.id.search_bar);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public void searchTerm(MenuItem menuItem) {
         SearchView searchView = (SearchView) menuItem.getActionView();
         searchView.setQueryHint("Search here!");
 
@@ -123,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        return super.onCreateOptionsMenu(menu);
     }
 
     public void login() {
@@ -154,15 +150,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    public void sortListbyPriceDesc(){
+    public void sortListbyPriceDesc() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             //carList.sort((o1, o2) -> o2.getPrice() -o1.getPrice());
             bindAdapterToListView(listView);
         }
     }
 
-    public void sortListbyPriceAsc(){
+    public void sortListbyPriceAsc() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             //carList.sort((o1, o2) -> o1.getPrice() -o2.getPrice());
             bindAdapterToListView(listView);
@@ -198,7 +193,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void add(){
+        Intent intent = new Intent(MainActivity.this, AddActivity.class);
+        startActivityForResult(intent, ADD_ACTIVITY_REQUEST_CODE);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //returns here when AddActivity upload is finished
+        if(requestCode == ADD_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                Car tmp = new Car(data.getStringExtra("Name"), Integer.parseInt(data.getStringExtra("Price")), data.getStringExtra("First_registration"), Integer.parseInt(data.getStringExtra("Ps")), Integer.parseInt(data.getStringExtra("Kilometres")), data.getStringExtra("Descripotion"), data.getStringExtra("Location"), data.getStringExtra("TelNumber"));
+                carList.add(tmp);
+                bindAdapterToListView(listView);
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+
+            }
+        }
     }
 
 }
