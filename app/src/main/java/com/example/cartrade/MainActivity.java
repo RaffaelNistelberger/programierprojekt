@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.add:
-                //Methode hinzufügen
+                add();
                 return true;
             case R.id.settings:
                 //Methode hinzufügen
@@ -61,10 +61,10 @@ public class MainActivity extends AppCompatActivity {
                 //Methode hinzufügen
                 return true;
             case R.id.priceInc:
-                //Methode hinzufügen
+                sortListbyPriceAsc();
                 return true;
             case R.id.priceDesc:
-                //Methode hinzufügen
+                sortListbyPriceDesc();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -126,6 +126,10 @@ public class MainActivity extends AppCompatActivity {
         DatabaseReference myRef = database.getReference("cars");
 
         myRef.setValue(new CarEntity(1,"Test3"));
+    }
+
+    public void add(){
+
     }
 
 }
