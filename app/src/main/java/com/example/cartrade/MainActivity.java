@@ -5,7 +5,6 @@ import androidx.annotation.RequiresApi;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.PreferenceManager;
 import androidx.appcompat.widget.SearchView;
 
 import android.content.Intent;
@@ -15,6 +14,7 @@ import android.content.ClipData;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,11 +26,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import android.view.View;
-<<<<<<< HEAD
 import android.widget.ArrayAdapter;
-=======
 import android.widget.ImageView;
->>>>>>> 9f2898496b7a49f255dd7d9559bd9c922e9d9946
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -41,6 +38,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -48,7 +46,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayAdapter adapter;
+    private MainAdapter adapter;
     private ArrayList<Car> carList;
     private ListView listView;
     private LinearLayout linearLayout;
@@ -68,16 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return super.onCreateOptionsMenu(menu);
-        //login();
-        loadData();
-        //saveData(3,new Car("Test3",1200.10,"1991",110,1000,"Auto3","DE","0650"));
-
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -107,6 +95,23 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.search_bar);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setQueryHint("Search here!");
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                //adapter.getFilter().filter(s);
+                return true;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -136,23 +141,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, key + " new Background: " + sValue, Toast.LENGTH_LONG).show();
             recreate();
         }
-    }
-
-    private void loadData(){
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot ds : snapshot.getChildren()){
-                    System.out.println(ds.getValue().toString());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
     }
 
     public void sortListbyPriceDesc(){
