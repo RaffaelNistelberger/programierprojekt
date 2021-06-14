@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout linearLayout;
     private final static int RQ_PREFERENCES = 1;
     private SharedPreferences prefs;
-    private int nextIndex;
+    private long nextIndex;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("cars");
@@ -57,8 +57,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        login();
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        loadData();
+        //login();
+        //prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
     }
 
@@ -67,10 +68,6 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
-        //login();
-        loadData();
-        //saveData(3,new Car("Test3",1200.10,"1991",110,1000,"Auto3","DE","0650"));
-
     }
 
     @Override
@@ -97,14 +94,9 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
 
     public void login() {
+
         carList = new ArrayList<>();
         linearLayout = findViewById(R.id.linearLayout);
         listView = findViewById(R.id.listView);
@@ -132,22 +124,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void loadData(){
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot ds : snapshot.getChildren()){
-                    System.out.println(ds.getValue().toString());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
 
     public void sortListbyPriceDesc(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -162,23 +138,24 @@ public class MainActivity extends AppCompatActivity {
             bindAdapterToListView(listView);
         }
     }
-    private void saveData(int index,Car carToAdd){
+    private void saveData(long index,Car carToAdd){
         myRef.child(index+"").setValue(carToAdd.toMap());
         System.out.println("Saved to Database!");
     }
 
     private void loadData(){
-
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                nextIndex = dataSnapshot.getChildrenCount();
+                System.out.println(nextIndex);
                 Iterable<DataSnapshot> dataSnapshot1 = dataSnapshot.getChildren();
                 Iterator it = dataSnapshot1.iterator();
                 while (it.hasNext()){
                     System.out.println((DataSnapshot)it.next());
-                    System.out.println(dataSnapshot.getChildrenCount());
+
                 }
+                //saveData(nextIndex, new Car("Test",12000,"1991",200,120000,"Auto"+nextIndex,"AUT", "0650"));
 
             }
 
