@@ -301,7 +301,7 @@ public class MainActivity extends AppCompatActivity {
 
     public Intent intentEntryActivity(int position){
 
-        Intent intent = new Intent(MainActivity.this, EntryActivity.class);
+        Intent intent = new Intent(this, EntryActivity.class);
         intent.putExtra("Name", carList.get(position).getName());
         intent.putExtra("Price", String.valueOf(carList.get(position).getPrice()));
         intent.putExtra("First_Registration", carList.get(position).getFirst_registration());

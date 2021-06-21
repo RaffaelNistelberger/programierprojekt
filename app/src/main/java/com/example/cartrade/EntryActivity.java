@@ -38,32 +38,26 @@ public class EntryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entry);
-
-
-
-
-
-
-
-        name = findViewById(R.id.editText_Name);
-        price = findViewById(R.id.editText_Price);
-        first_registration = findViewById(R.id.editText_first_registration);
-        kilometres = findViewById(R.id.editText_Kilometres);
-        ps = findViewById(R.id.editText_ps);
-        description = findViewById(R.id.editText_Description);
-        telNumber = findViewById(R.id.editText_TelNumber);
+        name = findViewById(R.id.name_TextView);
+        price = findViewById(R.id.price_TextView);
+        first_registration = findViewById(R.id.firstRegistration_TextView);
+        kilometres = findViewById(R.id.kilometres_TextView);
+        ps = findViewById(R.id.ps_TextView);
+        description = findViewById(R.id.description_TextView);
+        telNumber = findViewById(R.id.telNumber_TextView);
         carImage = findViewById(R.id.carImage);
         location = findViewById(R.id.location_TextView);
 
         Intent intent = getIntent();
-        name.setText(intent.getStringExtra("Name"));
-        price.setText(intent.getStringExtra("Price"));
-        first_registration.setText(intent.getStringExtra("First_Registration"));
-        kilometres.setText(intent.getStringExtra("Kilometres"));
-        ps.setText(intent.getStringExtra("Ps"));
-        description.setText(intent.getStringExtra("Description"));
-        telNumber.setText(intent.getStringExtra("TelNumber"));
-        location.setText(intent.getStringExtra("Location"));
+        Bundle bundle = intent.getExtras();
+        name.setText(bundle.getString("Name"));
+        price.setText(bundle.getString("Price"));
+        first_registration.setText(bundle.getString("First_Registration"));
+        kilometres.setText(bundle.getString("Kilometres"));
+        ps.setText(bundle.getString("Ps"));
+        description.setText(bundle.getString("Description"));
+        telNumber.setText(bundle.getString("TelNumber"));
+        location.setText(bundle.getString("Location"));
 
 
         carURL = intent.getStringExtra("CarURL");
