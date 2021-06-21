@@ -111,8 +111,8 @@ public class Car {
     public String toString() {
         return name + ";" + price + ";" + first_registration + ";" + ps + ";" + kilometres + ";" + description  + ";" + location + ";" + telNumber+";"+bitMapString;
     }
-    public Date getFirstRegistration() {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+   /* public Date getFirstRegistration() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/yyyy");
         try {
             return sdf.parse(first_registration);
         } catch (ParseException e) {
@@ -120,7 +120,7 @@ public class Car {
 
         }
         return new Date(first_registration);
-    }
+    }*/
 
     public Map<String,Object> toMap(){
         HashMap<String, Object> result = new HashMap<>();
