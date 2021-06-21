@@ -21,6 +21,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.content.ClipData;
+import android.net.Uri;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Build;
@@ -51,7 +52,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout linearLayout;
     private final static int RQ_PREFERENCES = 1;
     private SharedPreferences prefs;
-    public long nextIndex;
+    public static long nextIndex;
     private final int ADD_ACTIVITY_REQUEST_CODE = 187;
     public boolean darkModeBool;
     public SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
@@ -78,10 +83,14 @@ public class MainActivity extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("cars");
 
+    StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         loadData();
         login();
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -229,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
                     //String bitMapString = ds.child("bitMapString").getValue().toString();
 
 
-                    carList.add(new Car(name, price, first_registration, ps, kilometres, description, location, telNumber, "bitMapString"));
+                    carList.add(new Car(name, price, first_registration, ps, kilometres, description, location, telNumber, "unguad"));
                     bindAdapterToListView(listView);
                 }
             }

@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -29,7 +30,12 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.concurrent.ExecutionException;
@@ -51,11 +57,13 @@ public class AddActivity extends AppCompatActivity {
     private final int ACCESS_FINE_STORAGE = 123;
     private static final int RQ_ACCESS_FINE_LOCATION = 456;
     private String carImageString;
+    StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private LocationManager locationManager;
+    private boolean isGpsAllowed;
+    private LocationListener locationListener;
     private double lat;
     private double lon;
     private LinearLayout linearLayout;
-    private boolean isGpsAllowed;
 
 
     @Override
@@ -114,7 +122,14 @@ public class AddActivity extends AppCompatActivity {
                 InputStream inputStream = this.getContentResolver().openInputStream(data.getData());
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                 carImage.setImageBitmap(bitmap);
-                carImageString = bitMapToString(bitmap);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] upload_data = baos.toByteArray();
+
+                UploadTask uploadTask = storageRef.child("imgs").child(MainActivity.nextIndex+".jpg").putBytes(upload_data);
+
+                System.out.println("Fertig");
+                //carImageString =bitMapToString(bitmap);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -151,10 +166,41 @@ public class AddActivity extends AppCompatActivity {
     public double getLon() {
         return lon;
     }
+    private void gpsGranted() {
+        isGpsAllowed = true;
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
 
+            }
 
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
 
+            }
 
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+            }
+        };
+    }
+
+    private void checkPermissionGPS() {
+        String permission = Manifest.permission.ACCESS_FINE_LOCATION;
+        if (ActivityCompat.checkSelfPermission(this, permission)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{permission},
+                    RQ_ACCESS_FINE_LOCATION);
+        } else {
+            gpsGranted();
+        }
+    }
 
     private void displayLocation(Location location) {
         lat = location == null ? -1 :
@@ -183,13 +229,13 @@ public class AddActivity extends AppCompatActivity {
         this.location.setText(locationString);
     }
 
-    public String bitMapToString(Bitmap bitmap){
-        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
-        byte [] b=baos.toByteArray();
-        String temp= Base64.encodeToString(b, Base64.DEFAULT);
-        return temp;
-    }
+//    public String bitMapToString(Bitmap bitmap){
+//        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
+//        byte [] b=baos.toByteArray();
+//        String temp= Base64.encodeToString(b, Base64.DEFAULT);
+//        return temp;
+//    }
 
 
 
