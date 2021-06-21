@@ -76,6 +76,7 @@ public class EntryActivity extends AppCompatActivity {
 
         switch (id) {
             case android.R.id.home:
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
