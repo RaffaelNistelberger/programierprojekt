@@ -441,7 +441,6 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = intentCarInfoActivity(position);
                 startActivity(intent);
-
             }
         });
 
