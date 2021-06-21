@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -79,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
     public SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
     private static final int RQ_ACCESS_FINE_LOCATION = 456;
     private boolean isGpsAllowed= false;
+    private String GROUP_KEY_NOTIFICATION = "NotificationGroupKey";
+
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("cars");
@@ -113,6 +116,65 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+    public void showNewCarNotification(View view, int position) {
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        boolean test = prefs.getBoolean("notification_pref", true);
+        if(test) {
+            Intent intent = new Intent(this, EntryActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intentEntryActivity(position), 0);
+
+
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Notification notification = new Notification.Builder(this, "3")
+                        .setSmallIcon(android.R.drawable.star_big_on)
+                        .setColor(Color.YELLOW)
+                        .setContentTitle(getString(R.string.app_name))
+                        .setContentText("New Car")
+                        .setStyle(new Notification.BigTextStyle()
+                                .bigText("Created new Car"))
+                        .setWhen(System.currentTimeMillis())
+                        .setContentIntent(pendingIntent)
+                        .setAutoCancel(true)
+                        .setGroup(GROUP_KEY_NOTIFICATION)
+                        .build();
+
+                notificationManager.notify(222, notification);
+            }
+
+
+
+
+
+        }else{
+            notificationManager.cancel(222);
+        }
+
+
+        if( prefs.getBoolean("notification_pref", true)) {
+            Notification summaryNotification = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                summaryNotification = new Notification.Builder(this, "3")
+                        .setContentTitle("2 new messages")
+                        .setSmallIcon(android.R.drawable.star_big_on)
+                        .setColor(Color.YELLOW)
+                        .setContentTitle(getString(R.string.app_name))
+                        .setStyle(new Notification.BigTextStyle()
+                                .bigText("Das ist ein Text"))
+                        .setWhen(System.currentTimeMillis())
+                        .setGroup(GROUP_KEY_NOTIFICATION)
+                        .setGroupSummary(true)
+                        .build();
+            }
+            notificationManager.notify(333, summaryNotification);
+        }else{
+            notificationManager.cancel(333);
+        }
+
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
