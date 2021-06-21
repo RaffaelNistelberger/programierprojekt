@@ -52,11 +52,10 @@ public class AddActivity extends AppCompatActivity {
     private static final int RQ_ACCESS_FINE_LOCATION = 456;
     private String carImageString;
     private LocationManager locationManager;
-    private boolean isGpsAllowed;
-    private LocationListener locationListener;
     private double lat;
     private double lon;
     private LinearLayout linearLayout;
+    private boolean isGpsAllowed;
 
 
     @Override
@@ -65,7 +64,8 @@ public class AddActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-        checkPermissionGPS();
+        Intent intent = getIntent();
+        isGpsAllowed = intent.getBooleanExtra("isGpsAllowed", false);
 
         linearLayout = findViewById(R.id.linearLayout);
         name = findViewById(R.id.editText_Name);
@@ -81,9 +81,6 @@ public class AddActivity extends AppCompatActivity {
 
         location = findViewById(R.id.textView_location);
         btnClickUpdateCoordinates(linearLayout);
-
-
-
 
 
         upload.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +102,6 @@ public class AddActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -118,7 +114,7 @@ public class AddActivity extends AppCompatActivity {
                 InputStream inputStream = this.getContentResolver().openInputStream(data.getData());
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                 carImage.setImageBitmap(bitmap);
-                carImageString =bitMapToString(bitmap);
+                carImageString = bitMapToString(bitmap);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -126,30 +122,27 @@ public class AddActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint("MissingPermission    qasw3e")
     public void btnClickUpdateCoordinates(View view) {
 
         if (isGpsAllowed) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
             Location location = locationManager.getLastKnownLocation(
                     LocationManager.GPS_PROVIDER);
             displayLocation(location);
         }
     }
 
-    @Override
-    // Empfange das Ergebnis der Berechitungsabfrage
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode != RQ_ACCESS_FINE_LOCATION) return;
-        if (grantResults.length > 0 &&
-                grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "Permission ACCESS_FINE_LOCATION denied!", Toast.LENGTH_LONG).show();
-        } else {
-            gpsGranted();
-        }
-    }
+
 
     public double getLat() {
         return lat;
@@ -158,60 +151,10 @@ public class AddActivity extends AppCompatActivity {
     public double getLon() {
         return lon;
     }
-    private void gpsGranted() {
-        isGpsAllowed = true;
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
 
-            }
 
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
 
-            }
 
-            @Override
-            public void onProviderEnabled(String provider) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-            }
-        };
-    }
-    @Override
-    @SuppressLint("MissingPermission")
-    protected void onResume() {
-        super.onResume();
-        if (isGpsAllowed) { // aber nur, wenn GPS überhaupt erlaubt ist
-            locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER,
-                    3000,
-                    0,
-                    locationListener);
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (isGpsAllowed)
-            locationManager.removeUpdates(locationListener);
-    }
-
-    private void checkPermissionGPS() {
-        String permission = Manifest.permission.ACCESS_FINE_LOCATION;
-        if (ActivityCompat.checkSelfPermission(this, permission)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{permission},
-                    RQ_ACCESS_FINE_LOCATION);
-        } else {
-            gpsGranted();
-        }
-    }
 
     private void displayLocation(Location location) {
         lat = location == null ? -1 :
