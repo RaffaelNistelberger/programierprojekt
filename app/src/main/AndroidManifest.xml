@@ -34,6 +34,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".EntryActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SHOW_APP_INFO" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".MySettingsActivity"></activity>
     </application>
 

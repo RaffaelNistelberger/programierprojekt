@@ -41,7 +41,7 @@ public class EntryActivity extends AppCompatActivity {
 
 
 
-        Intent intent = getIntent();
+
 
 
 
@@ -55,6 +55,7 @@ public class EntryActivity extends AppCompatActivity {
         carImage = findViewById(R.id.carImage);
         location = findViewById(R.id.location_TextView);
 
+        Intent intent = getIntent();
         name.setText(intent.getStringExtra("Name"));
         price.setText(intent.getStringExtra("Price"));
         first_registration.setText(intent.getStringExtra("First_Registration"));
