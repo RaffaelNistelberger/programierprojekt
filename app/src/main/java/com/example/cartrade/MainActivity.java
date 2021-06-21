@@ -63,6 +63,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -120,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
     public void showNewCarNotification(View view, int position) {
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -128,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, CarInfoActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intentCarInfoActivity(position), 0);
-
 
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -149,15 +150,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-
-
-
-        }else{
+        } else {
             notificationManager.cancel(222);
         }
 
 
-        if( prefs.getBoolean("notification_pref", true)) {
+        if (prefs.getBoolean("notification_pref", true)) {
             Notification summaryNotification = null;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 summaryNotification = new Notification.Builder(this, "3")
@@ -173,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
                         .build();
             }
             notificationManager.notify(333, summaryNotification);
-        }else{
+        } else {
             notificationManager.cancel(333);
         }
 
@@ -210,6 +208,12 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.priceDesc:
                 sortListbyPriceDesc();
+                return true;
+            case R.id.registrationInc:
+                sortListbyRegistrationAsc();
+                return true;
+            case R.id.registrationDesc:
+                sortListbyRegistrationDesc();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -294,6 +298,35 @@ public class MainActivity extends AppCompatActivity {
             bindAdapterToListView(listView);
         }
     }
+
+    public void sortListbyRegistrationDesc() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            carList.sort(new Comparator<Car>() {
+                @Override
+                public int compare(Car o1, Car o2) {
+                    String[] tmp1 = o1.getFirst_registration().split("/");
+                    String[] tmp2 = o2.getFirst_registration().split("/");
+                    return Integer.parseInt(tmp1[1]) - Integer.parseInt(tmp2[1]);
+                }
+            });
+            bindAdapterToListView(listView);
+        }
+    }
+
+    public void sortListbyRegistrationAsc() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            carList.sort(new Comparator<Car>() {
+                @Override
+                public int compare(Car o1, Car o2) {
+                    String[] tmp1 = o1.getFirst_registration().split("/");
+                    String[] tmp2 = o2.getFirst_registration().split("/");
+                    return Integer.parseInt(tmp2[1]) - Integer.parseInt(tmp1[1]);
+                }
+            });
+            bindAdapterToListView(listView);
+        }
+    }
+
 
     private void saveData(long index, Car carToAdd) {
         myRef.child(index + "").setValue(carToAdd.toMap());
