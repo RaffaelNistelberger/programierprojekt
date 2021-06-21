@@ -7,17 +7,22 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.content.ClipData;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -67,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
     private final int ADD_ACTIVITY_REQUEST_CODE = 187;
     public boolean darkModeBool;
     public SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
+    private static final int RQ_ACCESS_FINE_LOCATION = 456;
+    private boolean isGpsAllowed= false;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("cars");
@@ -152,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
         //loadCarsIntoList
         bindAdapterToListView(listView);
         itemOnClickListener();
+        checkPermissionGPS();
     }
 
 
@@ -217,10 +225,10 @@ public class MainActivity extends AppCompatActivity {
                     String description = ds.child("description").getValue().toString();
                     String location = ds.child("location").getValue().toString();
                     String telNumber = ds.child("telNumber").getValue().toString();
-                    String bitMapString = ds.child("bitMapString").getValue().toString();
+                    //String bitMapString = ds.child("bitMapString").getValue().toString();
 
 
-                    carList.add(new Car(name, price, first_registration, ps, kilometres, description, location, telNumber, bitMapString));
+                    carList.add(new Car(name, price, first_registration, ps, kilometres, description, location, telNumber, "bitMapString"));
                     bindAdapterToListView(listView);
                 }
             }
@@ -235,6 +243,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void add() {
         Intent intent = new Intent(MainActivity.this, AddActivity.class);
+        intent.putExtra("isGpsAllowed", this.isGpsAllowed);
         startActivityForResult(intent, ADD_ACTIVITY_REQUEST_CODE);
     }
 
@@ -264,6 +273,21 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
+
+    private void checkPermissionGPS() {
+        String permission = Manifest.permission.ACCESS_FINE_LOCATION;
+        if (ActivityCompat.checkSelfPermission(this, permission)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{permission},
+                    RQ_ACCESS_FINE_LOCATION);
+        } else {
+            isGpsAllowed = true;
+        }
+    }
+
 
     public Intent intentEntryActivity(int position){
 
