@@ -193,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case R.id.add:
                 add();
+                //showNewCarNotification(linearLayout, carList.indexOf(carList.get(carList.size()-1)));
                 return true;
             case R.id.settings:
                 Intent intent = new Intent(this,
