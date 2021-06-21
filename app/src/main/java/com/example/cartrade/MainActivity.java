@@ -11,6 +11,9 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -84,15 +87,35 @@ public class MainActivity extends AppCompatActivity {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         preferenceChangeListener = this::preferenceChanged;
         prefs.registerOnSharedPreferenceChangeListener(preferenceChangeListener);
+        createNotificationChannel();
 
 
     }
 
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "getString(R.string.channel_name)";
+            String description = "getString(R. string . channel_description )";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("3", name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
 
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Notification.Builder builder = new
+                    Notification.Builder(this, "3")
+                    .setSmallIcon(android.R.drawable.star_big_on)
+                    .setColor(Color.YELLOW)
+                    .setContentTitle(getString(R.string.app_name))
+                    .setContentText("This is just a small Notification")
+                    .setWhen(System.currentTimeMillis());
+        }
         int id = item.getItemId();
         switch (id) {
             case R.id.add:
