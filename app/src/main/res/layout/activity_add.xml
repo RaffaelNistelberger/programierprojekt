@@ -81,7 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Price"
+                android:hint="Price in €"
                 android:inputType="textPersonName" />
 
             <TextView

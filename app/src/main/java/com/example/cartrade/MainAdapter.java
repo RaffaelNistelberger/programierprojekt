@@ -51,7 +51,7 @@ public class MainAdapter extends BaseAdapter implements Filterable {
 
         Car c = carList.get(position);
         ((TextView) listItem.findViewById(R.id.carName)).setText(c.getName());
-        ((TextView) listItem.findViewById(R.id.price)).setText(String.valueOf(c.getPrice()));
+        ((TextView) listItem.findViewById(R.id.price)).setText(c.getPrice()  + "€");
         return listItem;
     }
 

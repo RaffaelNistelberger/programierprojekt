@@ -1,24 +1,15 @@
 package com.example.cartrade;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.ContextThemeWrapper;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
-
-public class EntryActivity extends AppCompatActivity {
+public class CarInfoActivity extends AppCompatActivity {
 
 
     private TextView name;
@@ -37,7 +28,7 @@ public class EntryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_entry);
+        setContentView(R.layout.activity_car_info);
         name = findViewById(R.id.name_TextView);
         price = findViewById(R.id.price_TextView);
         first_registration = findViewById(R.id.firstRegistration_TextView);

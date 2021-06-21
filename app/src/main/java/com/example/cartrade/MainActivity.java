@@ -126,10 +126,10 @@ public class MainActivity extends AppCompatActivity {
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         boolean test = prefs.getBoolean("notification_pref", true);
-        if (test) {
-            Intent intent = new Intent(this, EntryActivity.class);
+        if(test) {
+            Intent intent = new Intent(this, CarInfoActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intentEntryActivity(position), 0);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intentCarInfoActivity(position), 0);
 
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -404,6 +404,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     private void checkPermissionGPS() {
         String permission = Manifest.permission.ACCESS_FINE_LOCATION;
         if (ActivityCompat.checkSelfPermission(this, permission)
@@ -417,9 +418,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public Intent intentEntryActivity(int position) {
+    public Intent intentCarInfoActivity(int position){
 
-        Intent intent = new Intent(this, EntryActivity.class);
+        Intent intent = new Intent(this, CarInfoActivity.class);
         intent.putExtra("Name", carList.get(position).getName());
         intent.putExtra("Price", String.valueOf(carList.get(position).getPrice()));
         intent.putExtra("First_Registration", carList.get(position).getFirst_registration());
@@ -438,8 +439,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Intent intent = intentEntryActivity(position);
+                Intent intent = intentCarInfoActivity(position);
                 startActivity(intent);
             }
         });
