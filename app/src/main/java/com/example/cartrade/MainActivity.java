@@ -321,10 +321,10 @@ public class MainActivity extends AppCompatActivity {
                     String description = ds.child("description").getValue().toString();
                     String location = ds.child("location").getValue().toString();
                     String telNumber = ds.child("telNumber").getValue().toString();
-                    //String bitMapString = ds.child("bitMapString").getValue().toString();
+                    String carURL = ds.child("carURL").getValue().toString();
 
 
-                    carList.add(new Car(name, price, first_registration, ps, kilometres, description, location, telNumber, "unguad"));
+                    carList.add(new Car(name, price, first_registration, ps, kilometres, description, location, telNumber, carURL));
                     bindAdapterToListView(listView);
                 }
             }
@@ -349,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
 
         //returns here when AddActivity upload is finished
         if (resultCode == Activity.RESULT_OK) {
-            Car tmp = new Car(data.getStringExtra("Name"), Integer.parseInt(data.getStringExtra("Price")), data.getStringExtra("First_Registration"), Integer.parseInt(data.getStringExtra("Ps")), Integer.parseInt(data.getStringExtra("Kilometres")), data.getStringExtra("Description"), data.getStringExtra("Location"), data.getStringExtra("TelNumber"), data.getStringExtra("CarImageString"));
+            Car tmp = new Car(data.getStringExtra("Name"), Integer.parseInt(data.getStringExtra("Price")), data.getStringExtra("First_Registration"), Integer.parseInt(data.getStringExtra("Ps")), Integer.parseInt(data.getStringExtra("Kilometres")), data.getStringExtra("Description"), data.getStringExtra("Location"), data.getStringExtra("TelNumber"),  nextIndex+".jpg");
             saveData(nextIndex, tmp);
         }
         if (resultCode == Activity.RESULT_CANCELED) {
