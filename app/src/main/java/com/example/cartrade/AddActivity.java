@@ -64,6 +64,7 @@ public class AddActivity extends AppCompatActivity {
     private double lat;
     private double lon;
     private LinearLayout linearLayout;
+    private byte[] upload_data;
 
 
     @Override
@@ -124,9 +125,9 @@ public class AddActivity extends AppCompatActivity {
                 carImage.setImageBitmap(bitmap);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] upload_data = baos.toByteArray();
+                upload_data = baos.toByteArray();
 
-                UploadTask uploadTask = storageRef.child("imgs").child(MainActivity.nextIndex+".jpg").putBytes(upload_data);
+
 
                 System.out.println("Fertig");
                 //carImageString =bitMapToString(bitmap);
@@ -287,6 +288,7 @@ public class AddActivity extends AppCompatActivity {
         alert.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        UploadTask uploadTask = storageRef.child("imgs").child(MainActivity.nextIndex+".jpg").putBytes(upload_data);
                         returnIntent();
                         alert.dismiss();
                         finish();
@@ -297,7 +299,6 @@ public class AddActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         alert.dismiss();
-                        finish();
                     }
                 });
         alert.setOnShowListener(new DialogInterface.OnShowListener() {
