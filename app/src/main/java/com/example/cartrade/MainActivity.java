@@ -34,6 +34,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -150,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
         listView = findViewById(R.id.listView);
         //loadCarsIntoList
         bindAdapterToListView(listView);
+        itemOnClickListener();
     }
 
 
@@ -260,6 +262,35 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
 
+
+    }
+
+    public Intent intentEntryActivity(int position){
+
+        Intent intent = new Intent(MainActivity.this, EntryActivity.class);
+        intent.putExtra("Name", carList.get(position).getName());
+        intent.putExtra("Price", String.valueOf(carList.get(position).getPrice()));
+        intent.putExtra("First_Registration", carList.get(position).getFirst_registration());
+        intent.putExtra("Kilometres", String.valueOf(carList.get(position).getKilometres()));
+        intent.putExtra("Ps", String.valueOf(carList.get(position).getPs()));
+        intent.putExtra("Description", carList.get(position).getDescription());
+        intent.putExtra("TelNumber", carList.get(position).getTelNumber());
+        intent.putExtra("Location", carList.get(position).getLocation());
+        intent.putExtra("CarURL", carList.get(position).getCarURL());
+
+
+        return intent;
+    }
+
+    public void itemOnClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Intent intent = intentEntryActivity(position);
+                startActivity(intent);
+            }
+        });
 
     }
 }
