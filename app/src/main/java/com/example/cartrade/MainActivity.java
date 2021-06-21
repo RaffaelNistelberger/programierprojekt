@@ -150,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
         if (key.equals("notification_pref")) {
             boolean sValue = sharedPrefs.getBoolean(key, true);
             Toast.makeText(this, key + " are " + sValue, Toast.LENGTH_LONG).show();
-
         }
     }
 
