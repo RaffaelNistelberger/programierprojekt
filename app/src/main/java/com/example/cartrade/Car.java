@@ -130,7 +130,7 @@ public class Car {
         result.put("description", this.description);
         result.put("location", this.location);
         result.put("telNumber", this.telNumber);
-        result.put("bitMapString", this.carURL);
+        result.put("carURL", this.carURL);
         return result;
     }
 
