@@ -14,6 +14,8 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -43,6 +45,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -62,6 +65,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
@@ -79,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean darkModeBool;
     public SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
     private static final int RQ_ACCESS_FINE_LOCATION = 456;
-    private boolean isGpsAllowed= false;
+    private boolean isGpsAllowed = false;
     private String GROUP_KEY_NOTIFICATION = "NotificationGroupKey";
 
 
@@ -221,7 +225,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void searchTerm(MenuItem menuItem) {
-
+        LinearLayout ll = new LinearLayout(this);
+        EditText et = new EditText(this);
+        et.setId(R.id.search_term_input);
+        et.setHint("Enter search term");
+        ll.addView(et);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setView(ll).setTitle("Search")
+                .setNegativeButton("cancel", (dialog, which) -> dialog.dismiss())
+                .setPositiveButton("ok", (dialog, which) -> {
+                    if (et.getText() != null) {
+                        List<Car> searchList = new ArrayList<>();
+                        for (Car car : carList) {
+                            if (car.getName().toLowerCase().contains(et.getText().toString().toLowerCase())) {
+                                searchList.add(car);
+                            }
+                        }
+                        adapter = new MainAdapter(getApplicationContext(), R.layout.activity_adapter, searchList);
+                        listView.setAdapter(adapter);
+                    }
+                    dialog.dismiss();
+                }).show();
     }
 
     public void login() {
@@ -347,7 +371,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     private void checkPermissionGPS() {
         String permission = Manifest.permission.ACCESS_FINE_LOCATION;
         if (ActivityCompat.checkSelfPermission(this, permission)
@@ -361,7 +384,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public Intent intentEntryActivity(int position){
+    public Intent intentEntryActivity(int position) {
 
         Intent intent = new Intent(this, EntryActivity.class);
         intent.putExtra("Name", carList.get(position).getName());

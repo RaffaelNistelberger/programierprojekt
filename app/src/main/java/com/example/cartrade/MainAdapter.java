@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -13,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MainAdapter extends BaseAdapter {
+public class MainAdapter extends BaseAdapter implements Filterable {
     private List<Car> carList = new ArrayList<>();
     private int layout_ID;
     private Context context;
@@ -52,4 +54,44 @@ public class MainAdapter extends BaseAdapter {
         ((TextView) listItem.findViewById(R.id.price)).setText(String.valueOf(c.getPrice()));
         return listItem;
     }
+
+
+    @Override
+    public Filter getFilter() {
+        Filter filter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+
+                FilterResults filterResults = new FilterResults();
+                if (constraint == null || constraint.length() == 0) {
+                    filterResults.count = carList.size();
+                    filterResults.values = carList;
+
+                } else {
+                    List<Car> resultsModel = new ArrayList<>();
+                    String searchStr = constraint.toString().toLowerCase();
+
+                    for (Car itemsModel : carList) {
+                        if (itemsModel.getName().contains(searchStr)) {
+                            resultsModel.add(itemsModel);
+                            filterResults.count = resultsModel.size();
+                            filterResults.values = resultsModel;
+                        }
+                    }
+                }
+
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+
+                carList = (List<Car>) results.values;
+                notifyDataSetChanged();
+
+            }
+        };
+        return filter;
+    }
 }
+
