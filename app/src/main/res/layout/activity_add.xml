@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -13,7 +14,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/carImage"
@@ -27,6 +28,12 @@
                 android:layout_height="wrap_content"
                 android:text="Select Photo" />
 
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Name" />
+
             <EditText
                 android:id="@+id/editText_Name"
                 android:layout_width="match_parent"
@@ -34,6 +41,12 @@
                 android:ems="10"
                 android:hint="Name"
                 android:inputType="textPersonName" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ps" />
 
             <EditText
                 android:id="@+id/editText_ps"
@@ -43,6 +56,12 @@
                 android:hint="Ps"
                 android:inputType="textPersonName" />
 
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Kilometres" />
+
             <EditText
                 android:id="@+id/editText_Kilometres"
                 android:layout_width="match_parent"
@@ -50,6 +69,12 @@
                 android:ems="10"
                 android:hint="Kilometres"
                 android:inputType="textPersonName" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Price" />
 
             <EditText
                 android:id="@+id/editText_Price"
@@ -59,6 +84,12 @@
                 android:hint="Price"
                 android:inputType="textPersonName" />
 
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="First Registration" />
+
             <EditText
                 android:id="@+id/editText_first_registration"
                 android:layout_width="match_parent"
@@ -66,6 +97,12 @@
                 android:ems="10"
                 android:hint="First Registration"
                 android:inputType="textPersonName" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Description" />
 
             <EditText
                 android:id="@+id/editText_Description"
@@ -75,13 +112,11 @@
                 android:hint="Description"
                 android:inputType="textPersonName" />
 
-            <EditText
-                android:id="@+id/editText_Location"
+            <TextView
+                android:id="@+id/textView8"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Location"
-                android:inputType="textPersonName" />
+                android:text="Telnumber" />
 
             <EditText
                 android:id="@+id/editText_TelNumber"
@@ -90,6 +125,18 @@
                 android:ems="10"
                 android:hint="TelNumber"
                 android:inputType="textPersonName" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Location" />
+
+            <TextView
+                android:id="@+id/textView_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Location permission missing" />
 
             <Button
                 android:id="@+id/button_Upload"

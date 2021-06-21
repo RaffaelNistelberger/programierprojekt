@@ -1,6 +1,7 @@
 package com.example.cartrade;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -9,6 +10,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.ContextThemeWrapper;
@@ -16,8 +20,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -25,6 +32,7 @@ import androidx.core.app.ActivityCompat;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.concurrent.ExecutionException;
 
 public class AddActivity extends AppCompatActivity {
 
@@ -34,21 +42,32 @@ public class AddActivity extends AppCompatActivity {
     private EditText kilometres;
     private EditText ps;
     private EditText description;
-    private EditText location;
+    private TextView location;
     private EditText telNumber;
     private Button upload;
     private Button pickPhoto;
     private final int PICK_PHOTO_FOR_AVATAR = 888;
     private ImageView carImage;
     private final int ACCESS_FINE_STORAGE = 123;
+    private static final int RQ_ACCESS_FINE_LOCATION = 456;
     private String carImageString;
+    private LocationManager locationManager;
+    private boolean isGpsAllowed;
+    private LocationListener locationListener;
+    private double lat;
+    private double lon;
+    private LinearLayout linearLayout;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
+        checkPermissionGPS();
+
+        linearLayout = findViewById(R.id.linearLayout);
         name = findViewById(R.id.editText_Name);
         price = findViewById(R.id.editText_Price);
         first_registration = findViewById(R.id.editText_first_registration);
@@ -57,8 +76,15 @@ public class AddActivity extends AppCompatActivity {
         description = findViewById(R.id.editText_Description);
         telNumber = findViewById(R.id.editText_TelNumber);
         upload = findViewById(R.id.button_Upload);
-        location = findViewById(R.id.editText_Location);
         carImage = findViewById(R.id.carImage);
+
+
+        location = findViewById(R.id.textView_location);
+        btnClickUpdateCoordinates(linearLayout);
+
+
+
+
 
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +104,8 @@ public class AddActivity extends AppCompatActivity {
 
     }
 
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -96,6 +124,120 @@ public class AddActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    public void btnClickUpdateCoordinates(View view) {
+
+        if (isGpsAllowed) {
+            Location location = locationManager.getLastKnownLocation(
+                    LocationManager.GPS_PROVIDER);
+            displayLocation(location);
+        }
+    }
+
+    @Override
+    // Empfange das Ergebnis der Berechitungsabfrage
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode != RQ_ACCESS_FINE_LOCATION) return;
+        if (grantResults.length > 0 &&
+                grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "Permission ACCESS_FINE_LOCATION denied!", Toast.LENGTH_LONG).show();
+        } else {
+            gpsGranted();
+        }
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public double getLon() {
+        return lon;
+    }
+    private void gpsGranted() {
+        isGpsAllowed = true;
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+            }
+        };
+    }
+    @Override
+    @SuppressLint("MissingPermission")
+    protected void onResume() {
+        super.onResume();
+        if (isGpsAllowed) { // aber nur, wenn GPS überhaupt erlaubt ist
+            locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    3000,
+                    0,
+                    locationListener);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (isGpsAllowed)
+            locationManager.removeUpdates(locationListener);
+    }
+
+    private void checkPermissionGPS() {
+        String permission = Manifest.permission.ACCESS_FINE_LOCATION;
+        if (ActivityCompat.checkSelfPermission(this, permission)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{permission},
+                    RQ_ACCESS_FINE_LOCATION);
+        } else {
+            gpsGranted();
+        }
+    }
+
+    private void displayLocation(Location location) {
+        lat = location == null ? -1 :
+                location.getLatitude();
+        lon = location == null ? -1 :
+                location.getLongitude();
+        //mLongitude.setText(String.format("%.4f", lon));
+        //mLatitude.setText(String.format(".4f", lat));
+
+        LocationTask lTask = new LocationTask(this);
+        String locationString = "No location found";
+        try {
+            String[] tmp = lTask.execute().get().split("\"");
+
+            for (int i = 0; i < tmp.length; i++) {
+                if (tmp[i].equals("city")) {
+                    locationString = tmp[i + 2];
+                }
+            }
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        this.location.setText(locationString);
     }
 
     public String bitMapToString(Bitmap bitmap){
