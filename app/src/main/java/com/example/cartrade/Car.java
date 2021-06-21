@@ -1,8 +1,6 @@
 package com.example.cartrade;
 
 
-import android.widget.ImageView;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,10 +17,10 @@ public class Car {
     private String description;
     private String location;
     private String telNumber;
-    private String bitMapString;
+    private String carURL;
 
 
-    public Car(String name, double price, String first_registration, int ps, int kilometres, String description, String location, String telNumber, String bitMapString) {
+    public Car(String name, double price, String first_registration, int ps, int kilometres, String description, String location, String telNumber, String carURL) {
         this.name = name;
         this.price = price;
         this.first_registration = first_registration;
@@ -31,7 +29,7 @@ public class Car {
         this.description = description;
         this.location = location;
         this.telNumber = telNumber;
-        this.bitMapString = bitMapString;
+        this.carURL = carURL;
 
     }
 
@@ -59,12 +57,12 @@ public class Car {
         this.first_registration = first_registration;
     }
 
-    public String getBitMapString() {
-        return bitMapString;
+    public String getCarURL() {
+        return carURL;
     }
 
-    public void setBitMapString(String bitMapString) {
-        this.bitMapString = bitMapString;
+    public void setCarURL(String carURL) {
+        this.carURL = carURL;
     }
 
     public int getPs() {
@@ -109,7 +107,7 @@ public class Car {
 
     @Override
     public String toString() {
-        return name + ";" + price + ";" + first_registration + ";" + ps + ";" + kilometres + ";" + description  + ";" + location + ";" + telNumber+";"+bitMapString;
+        return name + ";" + price + ";" + first_registration + ";" + ps + ";" + kilometres + ";" + description  + ";" + location + ";" + telNumber+";"+ carURL;
     }
    /* public Date getFirstRegistration() {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/yyyy");
@@ -132,7 +130,7 @@ public class Car {
         result.put("description", this.description);
         result.put("location", this.location);
         result.put("telNumber", this.telNumber);
-        result.put("bitMapString", this.bitMapString);
+        result.put("bitMapString", this.carURL);
         return result;
     }
 
