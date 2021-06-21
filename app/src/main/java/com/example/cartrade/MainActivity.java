@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SearchView;
 
 import android.app.Activity;
@@ -47,6 +48,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences prefs;
     public long nextIndex;
     private final int ADD_ACTIVITY_REQUEST_CODE = 187;
+    public boolean darkModeBool;
+    public SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("cars");
@@ -68,12 +73,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         loadData();
         login();
-        //prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        preferenceChangeListener = this::preferenceChanged;
+        prefs.registerOnSharedPreferenceChangeListener(preferenceChangeListener);
+
+
     }
+
 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         int id = item.getItemId();
         switch (id) {
             case R.id.add:
@@ -82,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.settings:
                 Intent intent = new Intent(this,
                         MySettingsActivity.class);
-                startActivityForResult(intent, RQ_PREFERENCES);
+                startActivityForResult(intent, 1);
+
                 return true;
             case R.id.search_bar:
                 searchTerm(item);
@@ -125,16 +137,20 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
     }
 
-    public void showPrefs(View view) {
-        String backgroundColor = prefs.getString(getString(R.string.Darkmode_pref), "#FFFFFF");
-        view.setBackgroundColor(Color.parseColor(backgroundColor));
-    }
-
     private void preferenceChanged(SharedPreferences sharedPrefs, String key) {
-        if (key.equals("Darkmode_pref")) {
-            String sValue = sharedPrefs.getString(key, "");
-            Toast.makeText(this, key + " new Background: " + sValue, Toast.LENGTH_LONG).show();
-            recreate();
+        if (key.equals("darkmode_pref")) {
+            darkModeBool = prefs.getBoolean("darkmode_pref", false);
+            if (darkModeBool) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+        }
+        if (key.equals("notification_pref")) {
+            boolean sValue = sharedPrefs.getBoolean(key, true);
+            Toast.makeText(this, key + " are " + sValue, Toast.LENGTH_LONG).show();
+
         }
     }
 
