@@ -101,12 +101,19 @@ public class MainActivity extends AppCompatActivity {
 
         loadData();
         login();
+
+
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        darkModeBool = prefs.getBoolean("darkmode_pref", false);
+        if (darkModeBool) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
         preferenceChangeListener = this::preferenceChanged;
         prefs.registerOnSharedPreferenceChangeListener(preferenceChangeListener);
         createNotificationChannel();
-
-
     }
 
     private void createNotificationChannel() {
@@ -275,14 +282,21 @@ public class MainActivity extends AppCompatActivity {
             darkModeBool = prefs.getBoolean("darkmode_pref", false);
             if (darkModeBool) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                Toast.makeText(this, "Darkmode is on!", Toast.LENGTH_LONG).show();
 
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                Toast.makeText(this, "Darmode is off!", Toast.LENGTH_LONG).show();
             }
         }
         if (key.equals("notification_pref")) {
             boolean sValue = sharedPrefs.getBoolean(key, true);
-            Toast.makeText(this, key + " are " + sValue, Toast.LENGTH_LONG).show();
+            if(sValue){
+                Toast.makeText(this, "Notifications are on!", Toast.LENGTH_LONG).show();
+            }else {
+                Toast.makeText(this, "Notifications are off!", Toast.LENGTH_LONG).show();
+            }
+
         }
     }
 

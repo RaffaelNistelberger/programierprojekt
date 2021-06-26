@@ -14,5 +14,7 @@ public class MySettingsActivity  extends AppCompatActivity {
                         MySettingsFragment())
                 .commit();
 
+
+
     }
 }
