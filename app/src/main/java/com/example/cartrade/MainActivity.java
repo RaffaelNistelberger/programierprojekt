@@ -1,12 +1,8 @@
 package com.example.cartrade;
 
-import androidx.annotation.RequiresApi;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
@@ -15,7 +11,6 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,30 +18,19 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.content.ClipData;
-import android.net.Uri;
-import android.location.Location;
-import android.location.LocationListener;
 import android.os.Build;
 import android.os.Bundle;
 
 import android.preference.PreferenceManager;
 import android.util.Base64;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-
-import android.os.Message;
-
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -58,18 +42,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.prefs.PreferenceChangeEvent;
-import java.util.prefs.PreferenceChangeListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -103,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         loadData();
         login();
         loadMyCarIds();
+        registerForContextMenu(findViewById(R.id.listView));
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         darkModeBool = prefs.getBoolean("darkmode_pref", false);
@@ -116,6 +94,22 @@ public class MainActivity extends AppCompatActivity {
         prefs.registerOnSharedPreferenceChangeListener(preferenceChangeListener);
         createNotificationChannel();
         //deleteCar(0);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.listview_menue, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.delete) {
+            deleteCar(0);
+            return true;
+        }
+        return super.onContextItemSelected(item);
     }
 
     private void loadMyCarIds(){
