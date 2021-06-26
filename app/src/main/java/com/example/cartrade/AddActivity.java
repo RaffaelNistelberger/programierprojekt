@@ -17,6 +17,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.ContextThemeWrapper;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -107,6 +108,10 @@ public class AddActivity extends AppCompatActivity {
 
             }
         });
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Auto hinzufügen");
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
     }
 
@@ -309,5 +314,15 @@ public class AddActivity extends AppCompatActivity {
         });
 
         alert.show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
