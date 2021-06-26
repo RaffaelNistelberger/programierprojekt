@@ -106,7 +106,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.delete) {
-            deleteCar(0);
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            adapter.getItem(info.position);
+            int id = Integer.parseInt(carList.get(info.position).getCarURL().split("[.]")[0]);
+            carList.remove(id);
+            bindAdapterToListView(this.listView);
+            deleteCar(id);
             return true;
         }
         return super.onContextItemSelected(item);
