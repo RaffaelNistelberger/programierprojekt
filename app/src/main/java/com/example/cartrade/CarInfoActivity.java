@@ -1,13 +1,21 @@
 package com.example.cartrade;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class CarInfoActivity extends AppCompatActivity {
 
@@ -49,14 +57,27 @@ public class CarInfoActivity extends AppCompatActivity {
         description.setText(bundle.getString("Description"));
         telNumber.setText(bundle.getString("TelNumber"));
         location.setText(bundle.getString("Location"));
-
-
         carURL = intent.getStringExtra("CarURL");
 
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(name.getText().toString());
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("imgs/"+carURL);
+        //Glide.with(context.getApplicationContext()).load(storageRef).into(imageView);
+        storageRef.getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                carImage.setImageBitmap(bitmap);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                System.out.println("Fehler");
+            }
+        });
 
     }
 
