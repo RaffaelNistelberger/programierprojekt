@@ -65,6 +65,7 @@ public class MainAdapter extends BaseAdapter implements Filterable {
         Car c = carList.get(position);
         ((TextView) listItem.findViewById(R.id.carName)).setText(c.getName());
         ((TextView) listItem.findViewById(R.id.price)).setText(c.getPrice()  + "€");
+        ((TextView) listItem.findViewById(R.id.ps)).setText(c.getPs()  + " PS");
         StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("imgs/"+c.getCarURL());
         ImageView imageView = listItem.findViewById(R.id.imageView);
 
@@ -74,6 +75,8 @@ public class MainAdapter extends BaseAdapter implements Filterable {
             public void onSuccess(byte[] bytes) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
                 imageView.setImageBitmap(bitmap);
+                imageView.setMaxHeight(125);
+                imageView.setMaxWidth(125);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
