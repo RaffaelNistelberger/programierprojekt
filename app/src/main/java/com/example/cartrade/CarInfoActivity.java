@@ -50,10 +50,10 @@ public class CarInfoActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         name.setText(bundle.getString("Name"));
-        price.setText(bundle.getString("Price"));
+        price.setText(bundle.getString("Price")+"€");
         first_registration.setText(bundle.getString("First_Registration"));
-        kilometres.setText(bundle.getString("Kilometres"));
-        ps.setText(bundle.getString("Ps"));
+        kilometres.setText(bundle.getString("Kilometres")+"km");
+        ps.setText(bundle.getString("Ps")+" PS");
         description.setText(bundle.getString("Description"));
         telNumber.setText(bundle.getString("TelNumber"));
         location.setText(bundle.getString("Location"));
