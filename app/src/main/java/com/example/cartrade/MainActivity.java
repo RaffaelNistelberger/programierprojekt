@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int RQ_ACCESS_FINE_LOCATION = 456;
     private boolean isGpsAllowed = false;
     private String GROUP_KEY_NOTIFICATION = "NotificationGroupKey";
+    public ArrayList<Long> myCarIdList;
 
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
         loadData();
         login();
-
+        loadMyCarIds();
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         darkModeBool = prefs.getBoolean("darkmode_pref", false);
@@ -114,6 +115,17 @@ public class MainActivity extends AppCompatActivity {
         preferenceChangeListener = this::preferenceChanged;
         prefs.registerOnSharedPreferenceChangeListener(preferenceChangeListener);
         createNotificationChannel();
+        //deleteCar(0);
+    }
+
+    private void loadMyCarIds(){
+        myCarIdList = new ArrayList<>();
+    }
+
+    private void deleteCar(int id){
+        myRef.child(id+"").removeValue();
+        StorageReference imgRef = storageRef.child("imgs/"+id+".jpg");
+        imgRef.delete();
     }
 
     private void createNotificationChannel() {
@@ -345,6 +357,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void saveData(long index, Car carToAdd) {
         myRef.child(index + "").setValue(carToAdd.toMap());
+        myCarIdList.add(index);
         System.out.println("Saved to Database!");
     }
 
