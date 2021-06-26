@@ -70,13 +70,12 @@ public class MainAdapter extends BaseAdapter implements Filterable {
         ImageView imageView = listItem.findViewById(R.id.imageView);
 
         //Glide.with(context.getApplicationContext()).load(storageRef).into(imageView);
-        storageRef.getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+        storageRef.getBytes(8388608).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
                 imageView.setImageBitmap(bitmap);
-                imageView.setMaxHeight(125);
-                imageView.setMaxWidth(125);
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
