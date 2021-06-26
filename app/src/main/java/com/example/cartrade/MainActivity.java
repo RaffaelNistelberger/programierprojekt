@@ -314,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void sortListbyRegistrationDesc() {
+    public void sortListbyRegistrationAsc() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             carList.sort(new Comparator<Car>() {
                 @Override
@@ -328,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void sortListbyRegistrationAsc() {
+    public void sortListbyRegistrationDesc() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             carList.sort(new Comparator<Car>() {
                 @Override
