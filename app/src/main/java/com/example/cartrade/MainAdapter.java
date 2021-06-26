@@ -1,6 +1,8 @@
 package com.example.cartrade;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +10,18 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -52,6 +65,22 @@ public class MainAdapter extends BaseAdapter implements Filterable {
         Car c = carList.get(position);
         ((TextView) listItem.findViewById(R.id.carName)).setText(c.getName());
         ((TextView) listItem.findViewById(R.id.price)).setText(c.getPrice()  + "€");
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("imgs/"+c.getCarURL());
+        ImageView imageView = listItem.findViewById(R.id.imageView);
+
+        //Glide.with(context.getApplicationContext()).load(storageRef).into(imageView);
+        storageRef.getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                imageView.setImageBitmap(bitmap);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                System.out.println("Fehler");
+            }
+        });
         return listItem;
     }
 
