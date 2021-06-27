@@ -159,9 +159,9 @@ public class MainActivity extends AppCompatActivity {
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         boolean test = prefs.getBoolean("notification_pref", true);
         if (test) {
-            Intent intent = new Intent(this, CarInfoActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intentCarInfoActivity(position), 0);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
                         .setStyle(new Notification.BigTextStyle()
                                 .bigText("Your car got uploaded!"))
                         .setWhen(System.currentTimeMillis())
-                        .setContentIntent(pendingIntent)
+                        //.setContentIntent(pendingIntent)
                         .setAutoCancel(true)
                         .setGroup(GROUP_KEY_NOTIFICATION)
                         .build();
