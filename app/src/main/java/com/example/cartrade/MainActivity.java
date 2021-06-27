@@ -35,6 +35,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences prefs;
     public static long nextIndex;
     private final int ADD_ACTIVITY_REQUEST_CODE = 187;
-    public boolean darkModeBool;
+    public static boolean darkModeBool;
     public SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
     private static final int RQ_ACCESS_FINE_LOCATION = 456;
     private boolean isGpsAllowed = false;
@@ -186,25 +187,25 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        if (prefs.getBoolean("notification_pref", true)) {
-            Notification summaryNotification = null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                summaryNotification = new Notification.Builder(this, "3")
-                        .setContentTitle("2 new messages")
-                        .setSmallIcon(android.R.drawable.star_big_on)
-                        .setColor(Color.YELLOW)
-                        .setContentTitle(getString(R.string.app_name))
-                        .setStyle(new Notification.BigTextStyle()
-                                .bigText("this is a text"))
-                        .setWhen(System.currentTimeMillis())
-                        .setGroup(GROUP_KEY_NOTIFICATION)
-                        .setGroupSummary(true)
-                        .build();
-            }
-            notificationManager.notify(333, summaryNotification);
-        } else {
-            notificationManager.cancel(333);
-        }
+//        if (prefs.getBoolean("notification_pref", true)) {
+//            Notification summaryNotification = null;
+//            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+//                summaryNotification = new Notification.Builder(this, "3")
+//                        .setContentTitle("2 new messages")
+//                        .setSmallIcon(R.drawable.outline_directions_car_24)
+//                        .setColor(Color.YELLOW)
+//                        .setContentTitle(getString(R.string.app_name))
+//                        .setStyle(new Notification.BigTextStyle()
+//                                .bigText("this is a text"))
+//                        .setWhen(System.currentTimeMillis())
+//                        .setGroup(GROUP_KEY_NOTIFICATION)
+//                        .setGroupSummary(true)
+//                        .build();
+//            }
+//            notificationManager.notify(333, summaryNotification);
+//        } else {
+//            notificationManager.cancel(333);
+//        }
 
     }
 
@@ -368,7 +369,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void saveData(long index, Car carToAdd) {
-        myRef.child(index + "").setValue(carToAdd.toMap());
+        myRef.child(index + "").setValue(carToAdd.toMap()).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                showNewCarNotification(linearLayout, carList.indexOf(carList.get(carList.size() - 1)));
+            }
+        });
         myCarIdList.add(index);
         System.out.println("Saved to Database!");
         save();
@@ -429,7 +435,7 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == Activity.RESULT_CANCELED) {
 
         }
-        showNewCarNotification(linearLayout, carList.indexOf(carList.get(carList.size() - 1)));
+        //showNewCarNotification(linearLayout, carList.indexOf(carList.get(carList.size() - 1)));
     }
 
     public Bitmap StringToBitMap(String encodedString) {

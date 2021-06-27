@@ -3,6 +3,7 @@ package com.example.cartrade;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +67,11 @@ public class MainAdapter extends BaseAdapter implements Filterable {
         ((TextView) listItem.findViewById(R.id.carName)).setText(c.getName());
         ((TextView) listItem.findViewById(R.id.price)).setText(c.getPrice()  + "€");
         ((TextView) listItem.findViewById(R.id.ps)).setText(c.getPs()  + " PS");
+        if(MainActivity.darkModeBool){
+            ((TextView) listItem.findViewById(R.id.carName)).setTextColor(Color.parseColor("#FF03DAC5"));
+            ((TextView) listItem.findViewById(R.id.price)).setTextColor(Color.parseColor("#FF03DAC5"));
+            ((TextView) listItem.findViewById(R.id.ps)).setTextColor(Color.parseColor("#FF03DAC5"));
+        }
         StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("imgs/"+c.getCarURL());
         ImageView imageView = listItem.findViewById(R.id.imageView);
 
