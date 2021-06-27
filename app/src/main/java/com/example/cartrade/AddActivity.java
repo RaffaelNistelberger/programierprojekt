@@ -293,10 +293,22 @@ public class AddActivity extends AppCompatActivity {
         alert.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        UploadTask uploadTask = storageRef.child("imgs").child(MainActivity.nextIndex+".jpg").putBytes(upload_data);
-                        returnIntent();
-                        alert.dismiss();
-                        finish();
+                        if(!name.getText().toString().equals("") &&
+                                !price.getText().toString().equals("") &&
+                                !first_registration.getText().toString().equals("") &&
+                                !kilometres.getText().toString().equals("") &&
+                                !ps.getText().toString().equals("") &&
+                                !description.getText().toString().equals("") &&
+                                !telNumber.getText().toString().equals("") &&
+                                upload_data!=null) {
+                            UploadTask uploadTask = storageRef.child("imgs").child(MainActivity.nextIndex + ".jpg").putBytes(upload_data);
+                            returnIntent();
+                            alert.dismiss();
+                            finish();
+                        }else{
+                            Toast.makeText(getApplicationContext(), "Bitte alle Felder ausfüllen und ein Bild auswählen!", Toast.LENGTH_LONG).show();
+                            alert.dismiss();
+                        }
                     }
                 });
 
