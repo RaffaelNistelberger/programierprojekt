@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.ParseException;
 import android.net.Uri;
 import android.location.Location;
 import android.location.LocationListener;
@@ -39,6 +40,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.concurrent.ExecutionException;
 
 public class AddActivity extends AppCompatActivity {
@@ -298,36 +303,36 @@ public class AddActivity extends AppCompatActivity {
                                 !description.getText().toString().equals("") &&
                                 !telNumber.getText().toString().equals("") &&
                                 upload_data != null) {
+                            String date = "01/" + first_registration.getText().toString();
+                            try {
 
-                            String date = first_registration.getText().toString();
-                            if (date.contains("/")) {
-                                String[] arr = date.split("/");
-                                if (arr.length == 2 &&
-                                        arr[0].length() == 2 &&
-                                        arr[1].length() == 4) {
-                                    try {
-                                        Car tmp = new Car(name.getText().toString(), Integer.parseInt(price.getText().toString()), first_registration.getText().toString(), Integer.parseInt(ps.getText().toString()), Integer.parseInt(kilometres.getText().toString()), "", "", "", ".jpg");
+                                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                                LocalDate localDateTime = LocalDate.parse(date, dtf);
+                                LocalDate now = LocalDate.now();
 
-                                        UploadTask uploadTask = storageRef.child("imgs").child(MainActivity.nextIndex + ".jpg").putBytes(upload_data);
-                                        returnIntent();
-                                        alert.dismiss();
-                                        finish();
-                                    }catch (NumberFormatException e){
-                                        Toast.makeText(getApplicationContext(), "Incorrect number: "+e.getMessage().split(":")[1]+"!", Toast.LENGTH_LONG).show();
-                                        alert.dismiss();
-                                    }
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "Incorrect first registration!", Toast.LENGTH_LONG).show();
+                                if(localDateTime.isBefore(now)) {
+                                    Car tmp = new Car(name.getText().toString(), Integer.parseInt(price.getText().toString()), first_registration.getText().toString(), Integer.parseInt(ps.getText().toString()), Integer.parseInt(kilometres.getText().toString()), "", "", "", ".jpg");
+
+                                    UploadTask uploadTask = storageRef.child("imgs").child(MainActivity.nextIndex + ".jpg").putBytes(upload_data);
+                                    returnIntent();
+                                    alert.dismiss();
+                                    finish();
+                                }else {
+                                    Toast.makeText(getApplicationContext(), "First registration is in the future!", Toast.LENGTH_LONG).show();
                                     alert.dismiss();
                                 }
-                            } else {
+                            } catch (DateTimeParseException e) {
                                 Toast.makeText(getApplicationContext(), "Incorrect first registration!", Toast.LENGTH_LONG).show();
+                                alert.dismiss();
+                            } catch (NumberFormatException e) {
+                                Toast.makeText(getApplicationContext(), "Incorrect number: " + e.getMessage().split(":")[1] + "!", Toast.LENGTH_LONG).show();
                                 alert.dismiss();
                             }
                         } else {
-                            Toast.makeText(getApplicationContext(), "Please fill all infos and select a picture", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Incorrect first registration!", Toast.LENGTH_LONG).show();
                             alert.dismiss();
                         }
+
                     }
                 });
 

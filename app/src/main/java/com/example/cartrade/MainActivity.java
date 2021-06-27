@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
                         .setContentTitle(getString(R.string.app_name))
                         .setContentText("New Car")
                         .setStyle(new Notification.BigTextStyle()
-                                .bigText("Created new Car"))
+                                .bigText("Your car got uploaded!"))
                         .setWhen(System.currentTimeMillis())
                         .setContentIntent(pendingIntent)
                         .setAutoCancel(true)
