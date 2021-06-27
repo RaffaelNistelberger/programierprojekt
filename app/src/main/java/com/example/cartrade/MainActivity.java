@@ -385,13 +385,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 carList.clear();
-                nextIndex = dataSnapshot.getChildrenCount() + 1;
+                //nextIndex = dataSnapshot.getChildrenCount() + 1;
                 System.out.println(nextIndex);
                 Iterable<DataSnapshot> dataSnapshot1 = dataSnapshot.getChildren();
                 Iterator it = dataSnapshot1.iterator();
                 while (it.hasNext()) {
+
                     DataSnapshot ds = ((DataSnapshot) it.next());
                     System.out.println(ds);
+                    if(!it.hasNext()){
+                        nextIndex = Integer.parseInt(ds.child("carURL").getValue().toString().split("[.]")[0])+1;
+                    }
 
                     String name = ds.child("name").getValue().toString();
                     double price = Double.parseDouble(ds.child("price").getValue().toString());
