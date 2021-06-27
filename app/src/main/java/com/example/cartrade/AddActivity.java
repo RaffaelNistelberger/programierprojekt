@@ -282,8 +282,7 @@ public class AddActivity extends AppCompatActivity {
 
 
     public void uploadAlert(){
-        final AlertDialog alert = new AlertDialog.Builder(
-                new ContextThemeWrapper(this, android.R.style.Theme_DeviceDefault_Wallpaper))
+        final AlertDialog alert = new AlertDialog.Builder(this)
                 .create();
         alert.setTitle("Upload");
         alert.setMessage("Want to upload?");
@@ -321,7 +320,7 @@ public class AddActivity extends AppCompatActivity {
         alert.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
-                alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.GREEN);
+                alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#43a047"));
             }
         });
 
