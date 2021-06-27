@@ -329,7 +329,7 @@ public class AddActivity extends AppCompatActivity {
                                 alert.dismiss();
                             }
                         } else {
-                            Toast.makeText(getApplicationContext(), "Incorrect first registration!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Missing Information!", Toast.LENGTH_LONG).show();
                             alert.dismiss();
                         }
 
