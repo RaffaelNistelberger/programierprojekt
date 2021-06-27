@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 Notification notification = new Notification.Builder(this, "3")
-                        .setSmallIcon(android.R.drawable.star_big_on)
+                        .setSmallIcon(R.drawable.outline_directions_car_24)
                         .setColor(Color.YELLOW)
                         .setContentTitle(getString(R.string.app_name))
                         .setContentText("New Car")
