@@ -43,6 +43,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -79,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
         loadData();
         login();
-        loadMyCarIds();
+        load();
         registerForContextMenu(findViewById(R.id.listView));
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -93,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
         preferenceChangeListener = this::preferenceChanged;
         prefs.registerOnSharedPreferenceChangeListener(preferenceChangeListener);
         createNotificationChannel();
-        //deleteCar(0);
     }
 
     @Override
@@ -109,21 +116,19 @@ public class MainActivity extends AppCompatActivity {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
             adapter.getItem(info.position);
             int id = Integer.parseInt(carList.get(info.position).getCarURL().split("[.]")[0]);
-            carList.remove(id);
-            bindAdapterToListView(this.listView);
-            deleteCar(id);
-            return true;
+            if(myCarIdList.contains(Long.parseLong(id+""))) {
+                carList.remove(id);
+                bindAdapterToListView(this.listView);
+                deleteCar(id);
+                return true;
+            }
         }
         return super.onContextItemSelected(item);
     }
 
-    private void loadMyCarIds(){
-        myCarIdList = new ArrayList<>();
-    }
-
-    private void deleteCar(int id){
-        myRef.child(id+"").removeValue();
-        StorageReference imgRef = storageRef.child("imgs/"+id+".jpg");
+    private void deleteCar(int id) {
+        myRef.child(id + "").removeValue();
+        StorageReference imgRef = storageRef.child("imgs/" + id + ".jpg");
         imgRef.delete();
     }
 
@@ -144,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         boolean test = prefs.getBoolean("notification_pref", true);
-        if(test) {
+        if (test) {
             Intent intent = new Intent(this, CarInfoActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intentCarInfoActivity(position), 0);
@@ -302,9 +307,9 @@ public class MainActivity extends AppCompatActivity {
         }
         if (key.equals("notification_pref")) {
             boolean sValue = sharedPrefs.getBoolean(key, true);
-            if(sValue){
+            if (sValue) {
                 Toast.makeText(this, "Notifications are on!", Toast.LENGTH_LONG).show();
-            }else {
+            } else {
                 Toast.makeText(this, "Notifications are off!", Toast.LENGTH_LONG).show();
             }
 
@@ -358,6 +363,7 @@ public class MainActivity extends AppCompatActivity {
         myRef.child(index + "").setValue(carToAdd.toMap());
         myCarIdList.add(index);
         System.out.println("Saved to Database!");
+        save();
     }
 
     private void loadData() {
@@ -409,7 +415,7 @@ public class MainActivity extends AppCompatActivity {
 
         //returns here when AddActivity upload is finished
         if (resultCode == Activity.RESULT_OK) {
-            Car tmp = new Car(data.getStringExtra("Name"), Integer.parseInt(data.getStringExtra("Price")), data.getStringExtra("First_Registration"), Integer.parseInt(data.getStringExtra("Ps")), Integer.parseInt(data.getStringExtra("Kilometres")), data.getStringExtra("Description"), data.getStringExtra("Location"), data.getStringExtra("TelNumber"),  nextIndex+".jpg");
+            Car tmp = new Car(data.getStringExtra("Name"), Integer.parseInt(data.getStringExtra("Price")), data.getStringExtra("First_Registration"), Integer.parseInt(data.getStringExtra("Ps")), Integer.parseInt(data.getStringExtra("Kilometres")), data.getStringExtra("Description"), data.getStringExtra("Location"), data.getStringExtra("TelNumber"), nextIndex + ".jpg");
             saveData(nextIndex, tmp);
         }
         if (resultCode == Activity.RESULT_CANCELED) {
@@ -431,7 +437,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     private void checkPermissionGPS() {
         String permission = Manifest.permission.ACCESS_FINE_LOCATION;
         if (ActivityCompat.checkSelfPermission(this, permission)
@@ -445,7 +450,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public Intent intentCarInfoActivity(int position){
+    public Intent intentCarInfoActivity(int position) {
 
         Intent intent = new Intent(this, CarInfoActivity.class);
         intent.putExtra("Name", carList.get(position).getName());
@@ -471,5 +476,39 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void save() {
+        try {
+            FileOutputStream outputStream = openFileOutput("notes.txt", MODE_PRIVATE);
+            PrintWriter writer = new PrintWriter(new OutputStreamWriter(outputStream));
+            for (long t : this.myCarIdList) {
+                writer.print(t + ";");
+            }
+            writer.flush();
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void load() {
+        myCarIdList = new ArrayList<>();
+        try {
+            FileInputStream fis = openFileInput("notes.txt");
+            BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+            String line;
+            if ((line = br.readLine()) != null) {
+                String[] arr = line.split(";");
+                for (int i = 0; i < arr.length; i++) {
+                    this.myCarIdList.add(Long.parseLong(arr[i]));
+                }
+            }
+            br.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
