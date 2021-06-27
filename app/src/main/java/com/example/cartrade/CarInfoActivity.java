@@ -75,7 +75,7 @@ public class CarInfoActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                System.out.println("Fehler");
+                System.out.println("exception");
             }
         });
 

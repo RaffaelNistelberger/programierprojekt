@@ -110,7 +110,7 @@ public class AddActivity extends AppCompatActivity {
         });
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Auto hinzufügen");
+        actionBar.setTitle("Add car");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
     }
@@ -134,7 +134,7 @@ public class AddActivity extends AppCompatActivity {
 
 
 
-                System.out.println("Fertig");
+                System.out.println("done");
                 //carImageString =bitMapToString(bitmap);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

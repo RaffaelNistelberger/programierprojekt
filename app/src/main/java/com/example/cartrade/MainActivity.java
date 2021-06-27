@@ -119,10 +119,10 @@ public class MainActivity extends AppCompatActivity {
                 carList.remove(id);
                 bindAdapterToListView(this.listView);
                 deleteCar(id);
-                Toast.makeText(this, "Auto gelöscht!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "car deleted!", Toast.LENGTH_LONG).show();
                 return true;
             }else{
-                Toast.makeText(this, "Löschen nicht möglich!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "not possible to delete!", Toast.LENGTH_LONG).show();
                 return true;
             }
         }
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
                         .setColor(Color.YELLOW)
                         .setContentTitle(getString(R.string.app_name))
                         .setStyle(new Notification.BigTextStyle()
-                                .bigText("Das ist ein Text"))
+                                .bigText("this is a text"))
                         .setWhen(System.currentTimeMillis())
                         .setGroup(GROUP_KEY_NOTIFICATION)
                         .setGroupSummary(true)
