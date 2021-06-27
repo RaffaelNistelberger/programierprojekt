@@ -116,13 +116,13 @@ public class MainActivity extends AppCompatActivity {
             adapter.getItem(info.position);
             int id = Integer.parseInt(carList.get(info.position).getCarURL().split("[.]")[0]);
             if(myCarIdList.contains(Long.parseLong(id+""))) {
-                carList.remove(id);
+                carList.remove(info.position);
                 bindAdapterToListView(this.listView);
                 deleteCar(id);
-                Toast.makeText(this, "car deleted!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Your car got deleted!", Toast.LENGTH_LONG).show();
                 return true;
             }else{
-                Toast.makeText(this, "not possible to delete!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Car is undeletable!", Toast.LENGTH_LONG).show();
                 return true;
             }
         }
@@ -376,7 +376,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 carList.clear();
-                nextIndex = dataSnapshot.getChildrenCount();
+                nextIndex = dataSnapshot.getChildrenCount()+1;
                 System.out.println(nextIndex);
                 Iterable<DataSnapshot> dataSnapshot1 = dataSnapshot.getChildren();
                 Iterator it = dataSnapshot1.iterator();
