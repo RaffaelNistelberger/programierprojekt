@@ -133,7 +133,6 @@ public class AddActivity extends AppCompatActivity {
                 upload_data = baos.toByteArray();
 
 
-
                 System.out.println("done");
                 //carImageString =bitMapToString(bitmap);
             } catch (FileNotFoundException e) {
@@ -164,7 +163,6 @@ public class AddActivity extends AppCompatActivity {
     }
 
 
-
     public double getLat() {
         return lat;
     }
@@ -172,6 +170,7 @@ public class AddActivity extends AppCompatActivity {
     public double getLon() {
         return lon;
     }
+
     private void gpsGranted() {
         isGpsAllowed = true;
         locationListener = new LocationListener() {
@@ -244,7 +243,6 @@ public class AddActivity extends AppCompatActivity {
 //    }
 
 
-
     private void checkPermissionExternalStorage() {
         String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
         String permission2 = Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -265,7 +263,7 @@ public class AddActivity extends AppCompatActivity {
         startActivityForResult(intent, PICK_PHOTO_FOR_AVATAR);
     }
 
-    public void returnIntent(){
+    public void returnIntent() {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("Name", name.getText().toString());
         returnIntent.putExtra("Price", price.getText().toString());
@@ -281,7 +279,7 @@ public class AddActivity extends AppCompatActivity {
     }
 
 
-    public void uploadAlert(){
+    public void uploadAlert() {
         final AlertDialog alert = new AlertDialog.Builder(this)
                 .create();
         alert.setTitle("Upload");
@@ -292,20 +290,42 @@ public class AddActivity extends AppCompatActivity {
         alert.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        if(!name.getText().toString().equals("") &&
+                        if (!name.getText().toString().equals("") &&
                                 !price.getText().toString().equals("") &&
                                 !first_registration.getText().toString().equals("") &&
                                 !kilometres.getText().toString().equals("") &&
                                 !ps.getText().toString().equals("") &&
                                 !description.getText().toString().equals("") &&
                                 !telNumber.getText().toString().equals("") &&
-                                upload_data!=null) {
-                            UploadTask uploadTask = storageRef.child("imgs").child(MainActivity.nextIndex + ".jpg").putBytes(upload_data);
-                            returnIntent();
-                            alert.dismiss();
-                            finish();
-                        }else{
-                            Toast.makeText(getApplicationContext(), "Bitte alle Felder ausfüllen und ein Bild auswählen!", Toast.LENGTH_LONG).show();
+                                upload_data != null) {
+
+                            String date = first_registration.getText().toString();
+                            if (date.contains("/")) {
+                                String[] arr = date.split("/");
+                                if (arr.length == 2 &&
+                                        arr[0].length() == 2 &&
+                                        arr[1].length() == 4) {
+                                    try {
+                                        Car tmp = new Car(name.getText().toString(), Integer.parseInt(price.getText().toString()), first_registration.getText().toString(), Integer.parseInt(ps.getText().toString()), Integer.parseInt(kilometres.getText().toString()), "", "", "", ".jpg");
+
+                                        UploadTask uploadTask = storageRef.child("imgs").child(MainActivity.nextIndex + ".jpg").putBytes(upload_data);
+                                        returnIntent();
+                                        alert.dismiss();
+                                        finish();
+                                    }catch (NumberFormatException e){
+                                        Toast.makeText(getApplicationContext(), "Incorrect number: "+e.getMessage().split(":")[1]+"!", Toast.LENGTH_LONG).show();
+                                        alert.dismiss();
+                                    }
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Incorrect first registration!", Toast.LENGTH_LONG).show();
+                                    alert.dismiss();
+                                }
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Incorrect first registration!", Toast.LENGTH_LONG).show();
+                                alert.dismiss();
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Please fill all infos and select a picture", Toast.LENGTH_LONG).show();
                             alert.dismiss();
                         }
                     }

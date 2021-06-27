@@ -51,6 +51,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -115,13 +118,13 @@ public class MainActivity extends AppCompatActivity {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
             adapter.getItem(info.position);
             int id = Integer.parseInt(carList.get(info.position).getCarURL().split("[.]")[0]);
-            if(myCarIdList.contains(Long.parseLong(id+""))) {
+            if (myCarIdList.contains(Long.parseLong(id + ""))) {
                 carList.remove(info.position);
                 bindAdapterToListView(this.listView);
                 deleteCar(id);
                 Toast.makeText(this, "Your car got deleted!", Toast.LENGTH_LONG).show();
                 return true;
-            }else{
+            } else {
                 Toast.makeText(this, "Car is undeletable!", Toast.LENGTH_LONG).show();
                 return true;
             }
@@ -132,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
     private void deleteCar(int id) {
         myRef.child(id + "").removeValue();
         StorageReference imgRef = storageRef.child("imgs/" + id + ".jpg");
-        myCarIdList.remove(Long.parseLong(id+""));
+        myCarIdList.remove(Long.parseLong(id + ""));
         save();
         imgRef.delete();
     }
@@ -376,7 +379,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 carList.clear();
-                nextIndex = dataSnapshot.getChildrenCount()+1;
+                nextIndex = dataSnapshot.getChildrenCount() + 1;
                 System.out.println(nextIndex);
                 Iterable<DataSnapshot> dataSnapshot1 = dataSnapshot.getChildren();
                 Iterator it = dataSnapshot1.iterator();
@@ -426,7 +429,7 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == Activity.RESULT_CANCELED) {
 
         }
-        showNewCarNotification(linearLayout, carList.indexOf(carList.get(carList.size()-1)));
+        showNewCarNotification(linearLayout, carList.indexOf(carList.get(carList.size() - 1)));
     }
 
     public Bitmap StringToBitMap(String encodedString) {
