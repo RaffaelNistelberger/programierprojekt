@@ -133,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
         myRef.child(id + "").removeValue();
         StorageReference imgRef = storageRef.child("imgs/" + id + ".jpg");
         myCarIdList.remove(Long.parseLong(id+""));
+        save();
         imgRef.delete();
     }
 
