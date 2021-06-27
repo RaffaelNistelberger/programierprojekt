@@ -8,3 +8,6 @@ Nistelberger Raffael,
 Obermüller Ben, 
 Reiter Elias, 
 Kepplinger Lukas
+
+# Schedule
+https://docs.google.com/spreadsheets/d/1NXAHaushQOXfAfKtbI7Q7NBEnQNLCZA75JYVZ-M6VGo/edit#gid=0
