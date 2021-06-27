@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case R.id.add:
                 add();
-                //showNewCarNotification(linearLayout, carList.indexOf(carList.get(carList.size()-1)));
+
                 return true;
             case R.id.settings:
                 Intent intent = new Intent(this,
@@ -426,6 +426,7 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == Activity.RESULT_CANCELED) {
 
         }
+        showNewCarNotification(linearLayout, carList.indexOf(carList.get(carList.size()-1)));
     }
 
     public Bitmap StringToBitMap(String encodedString) {
