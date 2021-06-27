@@ -89,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
         login();
         load();
         registerForContextMenu(findViewById(R.id.listView));
-
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         darkModeBool = prefs.getBoolean("darkmode_pref", false);
         if (darkModeBool) {
@@ -120,6 +119,10 @@ public class MainActivity extends AppCompatActivity {
                 carList.remove(id);
                 bindAdapterToListView(this.listView);
                 deleteCar(id);
+                Toast.makeText(this, "Auto gelöscht!", Toast.LENGTH_LONG).show();
+                return true;
+            }else{
+                Toast.makeText(this, "Löschen nicht möglich!", Toast.LENGTH_LONG).show();
                 return true;
             }
         }
@@ -129,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
     private void deleteCar(int id) {
         myRef.child(id + "").removeValue();
         StorageReference imgRef = storageRef.child("imgs/" + id + ".jpg");
+        myCarIdList.remove(Long.parseLong(id+""));
         imgRef.delete();
     }
 
