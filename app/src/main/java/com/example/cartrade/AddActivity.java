@@ -285,7 +285,7 @@ public class AddActivity extends AppCompatActivity {
         final AlertDialog alert = new AlertDialog.Builder(
                 new ContextThemeWrapper(this, android.R.style.Theme_DeviceDefault_Wallpaper))
                 .create();
-        alert.setTitle("Alert");
+        alert.setTitle("Upload");
         alert.setMessage("Want to upload?");
         alert.setCancelable(false);
         alert.setCanceledOnTouchOutside(false);
