@@ -93,9 +93,9 @@ public class MainActivity extends AppCompatActivity {
         login();
 
         load();
-        myCarIdList.clear();
-        save();
-        load();
+//        myCarIdList.clear();
+//        save();
+//        load();
         registerForContextMenu(findViewById(R.id.listView));
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         darkModeBool = prefs.getBoolean("darkmode_pref", false);
