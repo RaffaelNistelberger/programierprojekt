@@ -91,6 +91,10 @@ public class MainActivity extends AppCompatActivity {
 
         loadData();
         login();
+
+        load();
+        myCarIdList.clear();
+        save();
         load();
         registerForContextMenu(findViewById(R.id.listView));
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -104,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
         preferenceChangeListener = this::preferenceChanged;
         prefs.registerOnSharedPreferenceChangeListener(preferenceChangeListener);
         createNotificationChannel();
+        nextIndex = 1;
     }
 
     @Override
